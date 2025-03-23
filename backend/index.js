@@ -43,6 +43,7 @@ app.use("/api/orders", orderRoutes);
 
 
 
+
 //  Serve uploaded images as static files
 app.use("/uploads", express.static("uploads"));
 app.use("/upload", express.static("upload"));
