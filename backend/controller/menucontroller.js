@@ -1,74 +1,97 @@
-import Menu from "../models/menumodel.js";  // Import the Menu model
+import Menu from "../models/menumodel.js";
 
-// Get all menu items
+// Utility function to check if today is a special day
+const isSpecialDay = () => {
+  const today = new Date();
+  const month = today.getMonth() + 1; // Months are zero-based
+  const day = today.getDate();
+  const weekday = today.getDay(); // Sunday - Saturday : 0 - 6
+
+  // Special Days (Month-Day)
+  const specialDays = [
+    "2-14",  // Valentine's Day
+    "4-14",  // Sinhala and Tamil New Year
+    "12-25", // Christmas
+    "12-31", // New Year's Eve
+  ];
+
+  // Weekend Special (Saturday and Sunday)
+  if (weekday === 0 || weekday === 6) {
+    return "Weekend";
+  }
+
+  const todayStr = `${month}-${day}`;
+  if (specialDays.includes(todayStr)) {
+    return todayStr;
+  }
+
+  return null;
+};
+
+// Get all menu items (with special menu handling)
 export const getMenus = async (req, res) => {
-    try {
-        // Retrieve all menu items from the database
-        const menus = await Menu.find();
-        // Send the retrieved items as a JSON response
-        res.json(menus);
-    } catch (error) {
-        // Handle any server errors and send an error response
-        res.status(500).json({ message: error.message });
+  try {
+    const specialDay = isSpecialDay();
+
+    let menus;
+    if (specialDay) {
+      // Find special menus for the special day or weekends
+      menus = await Menu.find({ isSpecial: true, specialDay: { $in: [specialDay, "Weekend"] } });
+      console.log(`Displaying special menu for: ${specialDay}`);
     }
+
+    if (!menus || menus.length === 0) {
+      // Fallback to regular menu if no special menu exists
+      menus = await Menu.find({ isSpecial: false });
+      console.log("Displaying regular menu");
+    }
+
+    res.json(menus);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // Add a new menu item
 export const addMenu = async (req, res) => {
-    // Extract fields from the request body
-    const { name, description, price, availability, category } = req.body;
-    // Get the image path if the file is uploaded
-    const image = req.file ? req.file.path : "";
+  const { name, description, price, availability, category, isSpecial, specialDay } = req.body;
+  const image = req.file ? req.file.path : "";
 
-    try {
-        // Create a new menu item with the provided data
-        const newMenu = new Menu({ name, description, price, availability, category, image });
-        // Save the new item to the database
-        await newMenu.save();
-        // Send the newly created menu item as a JSON response
-        res.json(newMenu);
-    } catch (error) {
-        // Handle any errors during saving
-        res.status(400).json({ message: error.message });
-    }
+  try {
+    const newMenu = new Menu({ name, description, price, availability, category, image, isSpecial, specialDay });
+    await newMenu.save();
+    res.json(newMenu);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 // Update an existing menu item
 export const updateMenu = async (req, res) => {
-    // Extract the item ID from the request parameters
-    const { id } = req.params;
-    // Extract updated fields from the request body
-    const { name, description, price, availability, category } = req.body;
-    // Get the image path if the file is uploaded
-    const image = req.file ? req.file.path : "";
+  const { id } = req.params;
+  const { name, description, price, availability, category, isSpecial, specialDay } = req.body;
+  const image = req.file ? req.file.path : "";
 
-    try {
-        // Find the menu item by ID and update it with new data
-        const updatedMenu = await Menu.findByIdAndUpdate(
-            id,
-            { name, description, price, availability, category, image },
-            { new: true }  // Return the updated document
-        );
-        // Send the updated menu item as a JSON response
-        res.json(updatedMenu);
-    } catch (error) {
-        // Handle any errors during updating
-        res.status(400).json({ message: error.message });
-    }
+  try {
+    const updatedMenu = await Menu.findByIdAndUpdate(
+      id,
+      { name, description, price, availability, category, image, isSpecial, specialDay },
+      { new: true }
+    );
+    res.json(updatedMenu);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 // Delete a menu item
 export const deleteMenu = async (req, res) => {
-    // Extract the item ID from the request parameters
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        // Find the menu item by ID and delete it from the database
-        await Menu.findByIdAndDelete(id);
-        // Send a success message after deletion
-        res.json({ message: "Menu item deleted successfully" });
-    } catch (error) {
-        // Handle any errors during deletion
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    await Menu.findByIdAndDelete(id);
+    res.json({ message: "Menu item deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

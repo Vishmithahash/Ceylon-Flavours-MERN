@@ -4,11 +4,15 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import AddCart from "./pages/AddtoCart/AddCart";
 import AddMenu from "./pages/AddMenu/addmenu";
+import Menu from './pages/menu/Menu';
+import MenuTable from './pages/AddMenuTable/addmenutable';
+import UpdateMenu from './pages/UpdateMenu/updatemenu';
 import PlaceOrder from "./pages/order/placeOrder"; 
 import AdminOrder from "./pages/AdminOrder/adminOrder";
 import OrderStatus from "./pages/OrderStatus/orderStatus";
 import UpdatePlaceOrder from "./pages/order/updatePlaceOrder"; 
 import { CartProvider } from "./context/CartContext"; 
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   return (
@@ -17,7 +21,11 @@ function App() {
         <div id="wrapper">
           <Header />
           <Routes>
-            <Route path="/" element={<AddMenu />} />
+            <Route path="/" element={<Menu />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/addmenu" element={<AddMenu />} />
+            <Route path="/menutable" element={<MenuTable />} />
+            <Route path="/updatemenu/:id" element={<UpdateMenu />} />
             <Route path="/cart" element={<AddCart />} />
             <Route path="/place-order" element={<PlaceOrder />} /> 
             <Route path="/admin-orders" element={<AdminOrder />} /> 
