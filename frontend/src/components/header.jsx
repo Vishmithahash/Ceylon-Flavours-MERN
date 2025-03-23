@@ -22,8 +22,7 @@ function Header() {
                 )}
               </Link>
             </li>
-            <li><Link to="/admin-orders">Admin</Link></li> 
-            <li><Link to="/order-status">Order Status</Link></li>
+            
           </ul>
         </nav>
       </div>
