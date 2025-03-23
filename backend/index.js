@@ -30,13 +30,23 @@ app.use("/uploads", express.static("uploads"));
 
 
 import reservationRouter from "./routes/Reservationroutes.js";
+import reviewroute from "./routes/reviewroute.js";
+
 
 
 app.use("/api/reservation", reservationRouter);
+app.use('/api/reviews',reviewroute);
 
 //import order routes
 import orderRoutes from "./routes/orderRoute.js";
 app.use("/api/orders", orderRoutes);
+
+
+
+
+//  Serve uploaded images as static files
+app.use("/uploads", express.static("uploads"));
+app.use("/upload", express.static("upload"));
 
 
 //  Ensure MongoDB URL is defined
