@@ -17,16 +17,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json()); 
 
-
-
-
-
+// Importing routes
 import menuRoutes from "./routes/menuroute.js";
 
 
 
-app.use("/api/menu", menuRoutes);
+// Use routes
+app.use('/api/menu', menuRoutes);
+
+
+// Serve uploaded images as static files
+app.use("/uploads", express.static("uploads"));
+
+
+import reservationRouter from "./routes/Reservationroutes.js";
+import reviewroute from "./routes/reviewroute.js";
+
+
+
+
 app.use("/api/reservation", reservationRouter);
+app.use('/api/reviews',reviewroute);
 
 //import order routes
 import orderRoutes from "./routes/orderRoute.js";
@@ -34,14 +45,18 @@ app.use("/api/orders", orderRoutes);
 
 
 
+
 //import reservation routes
-import reservationRouter from "./routes/reservationRoutes.js";
+
 app.use("/api/reservation", reservationRouter);
+
 
 
 
 //  Serve uploaded images as static files
 app.use("/uploads", express.static("uploads"));
+app.use("/upload", express.static("upload"));
+
 
 //  Ensure MongoDB URL is defined
 if (!process.env.MONGODB_URL) {

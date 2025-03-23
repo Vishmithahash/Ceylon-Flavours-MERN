@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Menu = () => {
   const [itemName, setItemName] = useState("");
@@ -8,6 +11,11 @@ const Menu = () => {
   const [itemImage, setItemImage] = useState(null);
   const [itemAvailability, setItemAvailability] = useState(true);
   const [itemCategory, setItemCategory] = useState("Appetizers");
+  const [isSpecial, setIsSpecial] = useState(false);
+  const [specialDay, setSpecialDay] = useState(null); // Date object for special day
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     setItemImage(e.target.files[0]);
@@ -15,6 +23,13 @@ const Menu = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Price Validation
+    if (parseFloat(itemPrice) < 0) {
+      setErrorMessage("Price cannot be a negative number.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", itemName);
     formData.append("description", itemDescription);
@@ -22,6 +37,8 @@ const Menu = () => {
     formData.append("availability", itemAvailability);
     formData.append("category", itemCategory);
     formData.append("image", itemImage);
+    formData.append("isSpecial", isSpecial);
+    formData.append("specialDay", specialDay ? specialDay.toISOString() : ""); // Save date as ISO string
 
     try {
       await axios.post("http://localhost:5000/api/menu", formData, {
@@ -29,14 +46,17 @@ const Menu = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Menu item added successfully!");
       alert("Menu item added successfully!");
+      navigate("/menutable", { replace: true });
       setItemName("");
       setItemDescription("");
       setItemPrice("");
       setItemImage(null);
       setItemAvailability(true);
       setItemCategory("Appetizers");
+      setIsSpecial(false);
+      setSpecialDay(null);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error adding menu item:", error.response?.data || error.message);
       alert("Error adding menu item: " + (error.response?.data?.message || error.message));
@@ -47,6 +67,11 @@ const Menu = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700">Add Menu Item</h2>
+
+        {errorMessage && (
+          <p className="text-red-500 mb-4">{errorMessage}</p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-gray-600">Name</label>
@@ -55,7 +80,7 @@ const Menu = () => {
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
               placeholder="Enter item name"
-              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 mt-1 border rounded-md"
               required
             />
           </div>
@@ -66,7 +91,7 @@ const Menu = () => {
               value={itemDescription}
               onChange={(e) => setItemDescription(e.target.value)}
               placeholder="Enter item description"
-              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 mt-1 border rounded-md"
               required
             />
           </div>
@@ -74,10 +99,11 @@ const Menu = () => {
             <label className="block text-gray-600">Price</label>
             <input
               type="number"
+              min="0"
               value={itemPrice}
               onChange={(e) => setItemPrice(e.target.value)}
               placeholder="Enter item price"
-              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 mt-1 border rounded-md"
               required
             />
           </div>
@@ -86,7 +112,7 @@ const Menu = () => {
             <select
               value={itemCategory}
               onChange={(e) => setItemCategory(e.target.value)}
-              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 mt-1 border rounded-md"
               required
             >
               <option value="Appetizers">Appetizers</option>
@@ -96,12 +122,34 @@ const Menu = () => {
             </select>
           </div>
           <div>
+            <label className="block text-gray-600">Special Menu</label>
+            <input
+              type="checkbox"
+              checked={isSpecial}
+              onChange={(e) => setIsSpecial(e.target.checked)}
+              className="h-4 w-4 text-blue-500"
+            />
+            <label className="ml-2 text-gray-600">Mark as Special Menu</label>
+          </div>
+          {isSpecial && (
+            <div>
+              <label className="block text-gray-600">Special Day</label>
+              <DatePicker
+                selected={specialDay}
+                onChange={(date) => setSpecialDay(date)}
+                placeholderText="Select a special day"
+                className="w-full p-2 mt-1 border rounded-md"
+                required
+              />
+            </div>
+          )}
+          <div>
             <label className="block text-gray-600">Image</label>
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full p-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full p-2 mt-1 border rounded-md"
               required
             />
           </div>
