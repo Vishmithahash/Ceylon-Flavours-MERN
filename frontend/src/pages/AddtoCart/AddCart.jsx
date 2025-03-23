@@ -1,17 +1,17 @@
 import React, { useState } from "react"; 
 import { useCart } from "../../context/CartContext"; 
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate, Link } from "react-router-dom"; 
 import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react"; 
 
 function AddCart() {
   const { cartItems, addToCart, removeFromCart, decreaseQuantity } = useCart();
   const navigate = useNavigate();
 
-  // search/filter function
   const [searchTerm, setSearchTerm] = useState("");
+
   const handleCheckout = () => {
     if (cartItems.length > 0) {
-      navigate("/place-order");  
+      navigate("/place-order");
     }
   };
 
@@ -21,6 +21,25 @@ function AddCart() {
 
   return (
     <div className="w-full max-w-4xl bg-white rounded-lg shadow-md overflow-hidden mx-auto p-8">
+
+      {/* 🔵 Admin & Order Status Buttons */}
+      <div className="flex justify-end gap-4 mb-4">
+  <button
+    onClick={() => navigate("/admin-orders")}
+    className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-full transition"
+  >
+    Admin
+  </button>
+  <button
+    onClick={() => navigate("/order-status")}
+    className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-full transition"
+  >
+    Order Status
+  </button>
+</div>
+
+
+      {/* 🔶 Title & Search */}
       <div className="flex flex-col items-center mb-6">
         <h1 className="text-5xl font-bold text-center">Your <span className="text-emerald-500">Cart</span></h1>
         <input 
@@ -32,14 +51,13 @@ function AddCart() {
         />
       </div>
 
+      {/* 🧾 Cart Content */}
       {filteredItems.length === 0 ? (
         <p className="text-gray-500 text-center text-xl">Your cart is empty.</p>
       ) : (
         filteredItems.map((item) => (
           <div key={item._id} className="flex items-center p-6 gap-6 border-b">
-            
             <img src={`http://localhost:5000/uploads/${item.image}`} alt={item.name} className="w-24 h-24 object-cover rounded-lg border" />
-            
             
             <div className="flex-grow">
               <h3 className="font-bold text-xl text-gray-800">{item.name}</h3>
@@ -47,7 +65,6 @@ function AddCart() {
               <p className="text-lg text-gray-700">Quantity: {item.quantity}</p>
             </div>
 
-            {/* Quantity Controls */}
             <div className="flex items-center bg-gray-100 rounded-lg">
               <button onClick={() => decreaseQuantity(item._id)} className="px-4 py-2 text-pink-500 hover:bg-gray-200 rounded-l-lg">
                 <MinusIcon size={20} />
@@ -58,7 +75,6 @@ function AddCart() {
               </button>
             </div>
 
-            
             <button onClick={() => removeFromCart(item._id)} className="text-red-500 hover:text-red-700">
               <TrashIcon size={24} />
             </button>
@@ -66,7 +82,7 @@ function AddCart() {
         ))
       )}
 
-      {/*  Checkout Button */}
+      {/* ✅ Cart Summary & Checkout */}
       <div className="p-6 bg-gray-50 flex justify-between items-center mt-6 rounded-lg">
         <h2 className="font-bold text-2xl text-gray-700">
           Total: Rs.{filteredItems.reduce((total, item) => total + item.price * item.quantity, 0)}.00
