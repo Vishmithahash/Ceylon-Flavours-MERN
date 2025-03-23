@@ -35,14 +35,11 @@ function App() {
 
           <Route path="/pages/home/home" element={<HomePage />} />
             <Route path="/" element={<AddMenu />} />
-            
-
             <Route path="/" element={<Menu />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/addmenu" element={<AddMenu />} />
             <Route path="/menutable" element={<MenuTable />} />
             <Route path="/updatemenu/:id" element={<UpdateMenu />} />
-
             <Route path="/cart" element={<AddCart />} />
             <Route path="/place-order" element={<PlaceOrder />} /> 
             <Route path="/admin-orders" element={<AdminOrder />} /> 
@@ -51,17 +48,18 @@ function App() {
 
             <Route path="/reviewform" element={<ReviewForm />} />
             <Route path="/reviewspage" element={<ReviewsPage />} />
+            <Route path="/adminreviewpage" element={<AdminReviewPage />} />      
+
+
+            <Route path="/reviewform" element={<ReviewForm />} />
+            <Route path="/reviewspage" element={<ReviewsPage />} />
             <Route path="/adminreviewpage" element={<AdminReviewPage />} />
 
 
 
-            
                     <Route path="/pages/reservation/Reservation" element={<Reservation />} />
                     <Route path="/pages/reservation/ReservationBackground" element={<ReservationManagement />} />
                     <Route path="/pages/reservation/reservationList" element={<ReservationList />} />
-
-
-
 
           </Routes>
           <Footer />
