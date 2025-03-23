@@ -30,9 +30,20 @@ function App() {
           <Header />
           <Routes>
 
+
           <Route path="/pages/home/home" element={<HomePage />} />
             <Route path="/" element={<AddMenu />} />
             <Route path="/" element={<Menu />} />
+
+
+            <Route path="/pages/home/home" element={<HomePage />} />
+            <Route path="/" element={<HomePage/>} />
+
+          <Route path="/pages/home/home" element={<HomePage />} />
+            <Route path="/" element={<AddMenu />} />
+            <Route path="/" element={<Menu />} />
+
+
             <Route path="/menu" element={<Menu />} />
             <Route path="/addmenu" element={<AddMenu />} />
             <Route path="/menutable" element={<MenuTable />} />
