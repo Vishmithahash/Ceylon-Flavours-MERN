@@ -45,9 +45,18 @@ function App() {
             <Route path="/admin-orders" element={<AdminOrder />} /> 
             <Route path="/order-status" element={<OrderStatus />} />
             <Route path="/update-order/:id" element={<UpdatePlaceOrder />} />
+
             <Route path="/reviewform" element={<ReviewForm />} />
             <Route path="/reviewspage" element={<ReviewsPage />} />
             <Route path="/adminreviewpage" element={<AdminReviewPage />} />      
+
+
+            <Route path="/reviewform" element={<ReviewForm />} />
+            <Route path="/reviewspage" element={<ReviewsPage />} />
+            <Route path="/adminreviewpage" element={<AdminReviewPage />} />
+
+
+
                     <Route path="/pages/reservation/Reservation" element={<Reservation />} />
                     <Route path="/pages/reservation/ReservationBackground" element={<ReservationManagement />} />
                     <Route path="/pages/reservation/reservationList" element={<ReservationList />} />
