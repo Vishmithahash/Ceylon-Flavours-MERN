@@ -9,7 +9,6 @@ function Header() {
   const totalCartItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
-
     <div id="navcontent">
       <header className="bg-[#361a1d] text-white p-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
@@ -71,7 +70,6 @@ function Header() {
     </div>
   );
 
-  
 }
 
 export default Header;
