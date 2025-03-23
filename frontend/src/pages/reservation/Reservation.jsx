@@ -1,125 +1,231 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Reservation = () => {
-  const [reservations, setReservations] = useState([]);
-  const [formData, setFormData] = useState({ name: "", age: "", subject: "" });
-  const [editingId, setEditingId] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchReservations();
-  }, []);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+    time: "",
+    no_of_guests: "",
+    table_category: "Normal",
+    notes: "",
+  });
 
-  const fetchReservations = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/reservation");
-      setReservations(response.data);
-    } catch (error) {
-      console.error("Error fetching reservations:", error);
-    }
-  };
+  const [errors, setErrors] = useState({});
+
+  // Validation patterns
+  const phonePattern = /^07\d{8}$/;
+  const emailPattern = /^[a-z]+[a-z0-9]*@gmail\.com$/;
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    let newErrors = { ...errors };
+
+    if (name === "phone") {
+      newErrors.phone = !phonePattern.test(value)
+        ? "Must start with '07' and be 10 digits long."
+        : "";
+    }
+
+    if (name === "email") {
+      newErrors.email = !emailPattern.test(value)
+        ? "Must be a valid Gmail address (e.g. user@gmail.com)."
+        : "";
+    }
+
+    if (name === "date") {
+      const selectedDate = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      newErrors.date = selectedDate < today ? " Date cannot be in the past." : "";
+    }
+
+    if (name === "time" && formData.date) {
+      const selectedDateTime = new Date(`${formData.date}T${value}`);
+      const now = new Date();
+      newErrors.time = selectedDateTime < now ? " Time cannot be in the past." : "";
+    }
+
+    setErrors(newErrors);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (editingId) {
-        await axios.put(`http://localhost:5000/api/reservation/update/${editingId}`, formData);
-        alert("Reservation updated successfully");
-      } else {
-        await axios.post("http://localhost:5000/api/reservation/create", formData);
-        alert("Reservation Created successfully");
-      }
-      setFormData({ name: "", age: "", subject: "" });
-      setEditingId(null);
-      fetchReservations();
-    } catch (error) {
-      console.error("Error submitting reservation:", error);
+
+    // Final validations
+    const newErrors = {};
+
+    if (!phonePattern.test(formData.phone)) {
+      newErrors.phone = " Must start with '07' and be 10 digits long.";
     }
-  };
 
-  const handleEdit = (reservation) => {
-    setFormData({ name: reservation.name, age: reservation.age, subject: reservation.subject });
-    setEditingId(reservation._id);
-  };
+    if (!emailPattern.test(formData.email)) {
+      newErrors.email = " Must be a valid Gmail address (e.g. user@gmail.com).";
+    }
 
-  const handleDelete = async (id) => {
+    const now = new Date();
+    const selectedDateTime = new Date(`${formData.date}T${formData.time}`);
+    if (selectedDateTime < now) {
+      newErrors.date = " Date/time cannot be in the past.";
+      newErrors.time = " Date/time cannot be in the past.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((err) => err !== "")) {
+      alert(" Please fix the validation errors before submitting.");
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost:5000/api/reservation/delete/${id}`);
-      alert("Reservation deleted successfully");
-      fetchReservations();
+      await axios.post("http://localhost:5000/api/reservation/create", formData);
+      alert(" Reservation created successfully");
+
+      // Clear form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        date: "",
+        time: "",
+        no_of_guests: "",
+        table_category: "Normal",
+        notes: "",
+      });
+      setErrors({});
     } catch (error) {
-      console.error("Error deleting reservation:", error);
+      console.error("Error creating reservation:", error);
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Reservations</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded w-full"
-        />
-        <input
-          type="number"
-          name="age"
-          placeholder="Age"
-          value={formData.age}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded w-full"
-        />
-        <input
-          type="text"
-          name="subject"
-          placeholder="Subject"
-          value={formData.subject}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded w-full"
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editingId ? "Update" : "Create"} Reservation
-        </button>
-      </form>
+    <div
+      className="relative w-full min-h-screen bg-black text-white"
+      style={{
+        backgroundImage: 'url("/pics/anu.jpeg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="absolute inset-0 bg-black opacity-60"></div>
 
-      <div className="mt-6">
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-300 p-2">Name</th>
-              <th className="border border-gray-300 p-2">Age</th>
-              <th className="border border-gray-300 p-2">Subject</th>
-              <th className="border border-gray-300 p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservations.map((res) => (
-              <tr key={res._id} className="text-center">
-                <td className="border border-gray-300 p-2">{res.name}</td>
-                <td className="border border-gray-300 p-2">{res.age}</td>
-                <td className="border border-gray-300 p-2">{res.subject}</td>
-                <td className="border border-gray-300 p-2">
-                  <button onClick={() => handleEdit(res)} className="bg-yellow-500 text-white px-2 py-1 mr-2 rounded">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(res._id)} className="bg-red-500 text-white px-2 py-1 rounded">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="container mx-auto p-6 relative z-10">
+        <h2 className="text-3xl font-bold mb-6 text-center text-[#fffff]">Reserve a Table</h2>
+
+        <div className="bg-[rgba(255,255,255,0.5)] p-6 shadow-md rounded-lg max-w-2xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-4">
+
+            <input
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Name"
+              className="border p-2 rounded w-full text-black"
+              required
+            />
+
+            <input
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className={`border p-2 rounded w-full text-black ${errors.email ? "border-red-500" : ""}`}
+              required
+            />
+            {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+
+            <input
+              name="phone"
+              type="text"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Phone"
+              className={`border p-2 rounded w-full text-black ${errors.phone ? "border-red-500" : ""}`}
+              required
+            />
+            {errors.phone && <p className="text-red-600 text-sm">{errors.phone}</p>}
+
+            <input
+              name="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+              className={`border p-2 rounded w-full text-black ${errors.date ? "border-red-500" : ""}`}
+              required
+            />
+            {errors.date && <p className="text-red-600 text-sm">{errors.date}</p>}
+
+            <input
+              name="time"
+              type="time"
+              value={formData.time}
+              onChange={handleChange}
+              className={`border p-2 rounded w-full text-black ${errors.time ? "border-red-500" : ""}`}
+              required
+            />
+            {errors.time && <p className="text-red-600 text-sm">{errors.time}</p>}
+
+            <input
+              name="no_of_guests"
+              type="number"
+              value={formData.no_of_guests}
+              onChange={handleChange}
+              placeholder="Guests"
+              className="border p-2 rounded w-full text-black"
+              required
+            />
+
+            <select
+              name="table_category"
+              value={formData.table_category}
+              onChange={handleChange}
+              className="border p-2 rounded w-full text-black"
+              required
+            >
+              <option value="Normal">Normal</option>
+              <option value="VIP">VIP</option>
+            </select>
+
+            <textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              placeholder="Notes"
+              className="border p-2 rounded w-full h-24 resize-none text-black"
+            />
+
+            <button
+              type="submit"
+              className="bg-[#403d3d] text-white px-4 py-2 rounded w-full mt-4"
+            >
+              Create Reservation
+            </button>
+
+            
+          </form>
+        </div>
+
+
+        <div className="flex justify-center">
+        <button
+            onClick={() => navigate("/pages/reservation/reservationList")}
+            className="bg-red-900 text-white px-4 py-2 rounded w-40 mt-4"
+        >
+          View All Reservations
+        </button>
+</div>
+
+
       </div>
     </div>
   );
