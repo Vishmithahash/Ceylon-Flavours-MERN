@@ -15,14 +15,13 @@ import ReviewForm from "./pages/review/ReviewForm";
 import ReviewsPage from "./pages/review/ReviewsPage";
 import AdminReviewPage from './pages/review/AdminReviewPage';
 import { CartProvider } from "./context/CartContext"; 
-
 import Reservation from "./pages/reservation/Reservation";
-
 import ReservationList from "./pages/reservation/reservationList";
 import ReservationManagement from "./pages/reservation/ReservationBackground";
 import HomePage from "./pages/home/home";
 
 import "react-datepicker/dist/react-datepicker.css";
+import Delivery from "./pages/Delivery/delivery";
 
 
 function App() {
@@ -35,7 +34,7 @@ function App() {
 
           <Route path="/pages/home/home" element={<HomePage />} />
             <Route path="/" element={<AddMenu />} />
-            
+             
 
             <Route path="/" element={<Menu />} />
             <Route path="/menu" element={<Menu />} />
@@ -52,6 +51,7 @@ function App() {
             <Route path="/reviewform" element={<ReviewForm />} />
             <Route path="/reviewspage" element={<ReviewsPage />} />
             <Route path="/adminreviewpage" element={<AdminReviewPage />} />
+            <Route path="/delivery" element={<Delivery/>} />
 
 
 
@@ -62,6 +62,14 @@ function App() {
 
 
 
+                   
+
+                 
+                    
+                    
+
+
+                    
 
           </Routes>
           <Footer />
