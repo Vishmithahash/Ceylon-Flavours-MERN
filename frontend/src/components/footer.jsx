@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#361a1d] text-white p-4 shadow-lg ">
+    <footer className="bg-[#361a1d] text-white p-4 shadow-lg w-full fixed bottom-0">
       <div className="container mx-auto text-center">
         <p>&copy; 2025 Ceylon Flavors. All rights reserved.</p>
       </div>
@@ -11,3 +11,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
