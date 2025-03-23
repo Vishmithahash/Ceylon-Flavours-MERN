@@ -19,11 +19,13 @@ app.use(express.json());
 
 // Importing routes
 import menuRoutes from "./routes/menuroute.js";
+import deliveryRouter from "./routes/deliveryRoutes.js";
 
 
 
 // Use routes
 app.use('/api/menu', menuRoutes);
+app.use("/api/delivery", deliveryRouter);
 
 
 // Serve uploaded images as static files
