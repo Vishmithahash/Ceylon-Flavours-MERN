@@ -11,6 +11,9 @@ import PlaceOrder from "./pages/order/placeOrder";
 import AdminOrder from "./pages/AdminOrder/adminOrder";
 import OrderStatus from "./pages/OrderStatus/orderStatus";
 import UpdatePlaceOrder from "./pages/order/updatePlaceOrder"; 
+import ReviewForm from "./pages/review/ReviewForm";
+import ReviewsPage from "./pages/review/ReviewsPage";
+import AdminReviewPage from './pages/review/AdminReviewPage';
 import { CartProvider } from "./context/CartContext"; 
 
 import Reservation from "./pages/reservation/Reservation";
@@ -46,11 +49,17 @@ function App() {
             <Route path="/order-status" element={<OrderStatus />} />
             <Route path="/update-order/:id" element={<UpdatePlaceOrder />} />
 
+            <Route path="/reviewform" element={<ReviewForm />} />
+            <Route path="/reviewspage" element={<ReviewsPage />} />
+            <Route path="/adminreviewpage" element={<AdminReviewPage />} />
+
+
 
             
                     <Route path="/pages/reservation/Reservation" element={<Reservation />} />
                     <Route path="/pages/reservation/ReservationBackground" element={<ReservationManagement />} />
                     <Route path="/pages/reservation/reservationList" element={<ReservationList />} />
+
 
 
 
