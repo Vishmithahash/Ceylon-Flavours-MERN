@@ -15,6 +15,7 @@ function Header() {
           {/* Logo */}
           <h1 className="text-2xl font-extrabold tracking-wide">Ceylon Flavors</h1>
 
+
           {/* Navigation */}
           <nav>
             <ul className="flex space-x-6 text-lg items-center">
