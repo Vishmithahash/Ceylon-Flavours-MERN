@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext"; // Import Cart Context
 
 function AddMenu() {
   // State variables to manage menu items and search/filter functionality
@@ -9,6 +10,7 @@ function AddMenu() {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [daysToNextSpecial, setDaysToNextSpecial] = useState(null); // State to store days until the next special menu
+  const { addToCart } = useCart(); // Get addToCart function from context
 
   const navigate = useNavigate();
 
@@ -152,11 +154,9 @@ function AddMenu() {
                   >
                     {item.availability ? "Available" : "Unavailable"}
                   </p>
-                  <button
-                    className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300"
-                  >
-                    Add to Cart
-                  </button>
+                  <button onClick={() => addToCart(item)} className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                  Add to Cart
+                  </button>
                 </div>
               ))}
           </div>
