@@ -1,6 +1,6 @@
 import express from "express"
 
-import { createReservation,getAllReservation,getReservationById,updateReservation,deleteReservation } from "../controller/ReservationController.js";
+import { createReservation,getAllReservation,getReservationById,updateReservation,deleteReservation } from "../controller/reservationController.js";
 
 
 
@@ -14,3 +14,4 @@ reservationRouter.delete("/delete/:id",deleteReservation)
 
 
 export default reservationRouter;
+
