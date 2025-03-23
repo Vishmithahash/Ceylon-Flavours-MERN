@@ -21,6 +21,7 @@ app.use(express.json());
 import menuRoutes from "./routes/menuroute.js";
 
 
+
 // Use routes
 app.use('/api/menu', menuRoutes);
 
@@ -34,12 +35,20 @@ import reviewroute from "./routes/reviewroute.js";
 
 
 
+
 app.use("/api/reservation", reservationRouter);
 app.use('/api/reviews',reviewroute);
 
 //import order routes
 import orderRoutes from "./routes/orderRoute.js";
 app.use("/api/orders", orderRoutes);
+
+
+
+
+//import reservation routes
+
+app.use("/api/reservation", reservationRouter);
 
 
 
