@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const Menu = () => {
+function Menu() {
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [itemPrice, setItemPrice] = useState("");
@@ -12,7 +12,7 @@ const Menu = () => {
   const [itemAvailability, setItemAvailability] = useState(true);
   const [itemCategory, setItemCategory] = useState("Appetizers");
   const [isSpecial, setIsSpecial] = useState(false);
-  const [specialDay, setSpecialDay] = useState(null); // Date object for special day
+  const [specialDay, setSpecialDay] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
@@ -24,9 +24,13 @@ const Menu = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Price Validation
     if (parseFloat(itemPrice) < 0) {
       setErrorMessage("Price cannot be a negative number.");
+      return;
+    }
+
+    if (isSpecial && !specialDay) {
+      setErrorMessage("Please select a special day.");
       return;
     }
 
@@ -38,7 +42,7 @@ const Menu = () => {
     formData.append("category", itemCategory);
     formData.append("image", itemImage);
     formData.append("isSpecial", isSpecial ? "true" : "false");
-    formData.append("specialDay", specialDay ? specialDay.toISOString() : ""); // Save date as ISO string
+    formData.append("specialDay", specialDay ? specialDay.toISOString() : "");
 
     try {
       await axios.post("http://localhost:5000/api/menu", formData, {
@@ -48,19 +52,38 @@ const Menu = () => {
       });
       alert("Menu item added successfully!");
       navigate("/menutable", { replace: true });
-      setItemName("");
-      setItemDescription("");
-      setItemPrice("");
-      setItemImage(null);
-      setItemAvailability(true);
-      setItemCategory("Appetizers");
-      setIsSpecial(false);
-      setSpecialDay(null);
-      setErrorMessage("");
+      resetForm();
     } catch (error) {
       console.error("Error adding menu item:", error.response?.data || error.message);
       alert("Error adding menu item: " + (error.response?.data?.message || error.message));
     }
+  };
+
+  const resetForm = () => {
+    setItemName("");
+    setItemDescription("");
+    setItemPrice("");
+    setItemImage(null);
+    setItemAvailability(true);
+    setItemCategory("Appetizers");
+    setIsSpecial(false);
+    setSpecialDay(null);
+    setErrorMessage("");
+  };
+
+  const allowedSpecialDates = ["02-14", "04-14", "12-25", "12-31"];
+
+  const filterDate = (date) => {
+    const day = date.getDay();
+    const month = date.getMonth() + 1;
+    const dayOfMonth = date.getDate();
+    const formatted = `${String(month).padStart(2, "0")}-${String(dayOfMonth).padStart(2, "0")}`;
+
+    return (
+      day === 0 || // Sunday
+      day === 6 || // Saturday
+      allowedSpecialDates.includes(formatted)
+    );
   };
 
   return (
@@ -68,9 +91,7 @@ const Menu = () => {
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700">Add Menu Item</h2>
 
-        {errorMessage && (
-          <p className="text-red-500 mb-4">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -121,8 +142,7 @@ const Menu = () => {
               <option value="Beverages">Beverages</option>
             </select>
           </div>
-          <div>
-            <label className="block text-gray-600">Special Menu</label>
+          <div className="flex items-center">
             <input
               type="checkbox"
               checked={isSpecial}
@@ -131,18 +151,21 @@ const Menu = () => {
             />
             <label className="ml-2 text-gray-600">Mark as Special Menu</label>
           </div>
+
           {isSpecial && (
             <div>
               <label className="block text-gray-600">Special Day</label>
               <DatePicker
                 selected={specialDay}
                 onChange={(date) => setSpecialDay(date)}
-                placeholderText="Select a special day"
+                filterDate={filterDate}
+                placeholderText="Select Special Day (Only valid dates)"
                 className="w-full p-2 mt-1 border rounded-md"
-                required
+                required={isSpecial}
               />
             </div>
           )}
+
           <div>
             <label className="block text-gray-600">Image</label>
             <input
@@ -153,15 +176,16 @@ const Menu = () => {
               required
             />
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center">
             <input
               type="checkbox"
               checked={itemAvailability}
               onChange={(e) => setItemAvailability(e.target.checked)}
               className="h-4 w-4 text-blue-500"
             />
-            <label className="text-gray-600">Available</label>
+            <label className="ml-2 text-gray-600">Available</label>
           </div>
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 mt-4 rounded-md hover:bg-blue-600 transition duration-200"
@@ -172,6 +196,6 @@ const Menu = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Menu;

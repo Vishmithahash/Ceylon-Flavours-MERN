@@ -1,55 +1,69 @@
-import express from "express";       // Express framework for creating HTTP server and routing
-import multer from "multer";         // Middleware for handling file uploads
-import path from "path";             // Node.js module for handling file and directory paths
-import { getSpecialMenus, addSpecialMenu, deleteSpecialMenu } from "../controllers/specialmenuController.js"; // Import controller functions
+import express from "express";
+import multer from "multer";
+import SpecialMenu from "../models/specialmenumodel.js";
 
 const router = express.Router();
 
-// Configure multer for image uploads
+// Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save images in the 'uploads' folder
+    cb(null, "uploads/");
   },
-  // Set the filename for uploaded images
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+    cb(null, file.fieldname + "-" + uniqueSuffix + file.originalname);
   },
 });
-
 const upload = multer({ storage });
 
-
-
-// Route to get all special menu items
+// Get all special menu items
 router.get("/", async (req, res) => {
   try {
-    const items = await getSpecialMenus(req, res);
-    res.json(items);
+    const menus = await SpecialMenu.find({});
+    res.json(menus);
   } catch (error) {
-    res.status(500).json({ message: "Server error: " + error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// Route to add a new special menu item
+// Add a special menu item
 router.post("/", upload.single("image"), async (req, res) => {
+  const { name, description, price, availability, category, specialDay } = req.body;
+  const image = req.file ? req.file.filename : "";
+
+  if (!name || !description || !price || !category) {
+    return res.status(400).json({ message: "All fields are required" }); // <-- use RETURN here
+  }
+
   try {
-    const savedItem = await addSpecialMenu(req, res);
-    res.status(201).json(savedItem);
+    const newSpecialMenu = new SpecialMenu({
+      name,
+      description,
+      price: parseFloat(price),
+      availability: availability ?? true,
+      category,
+      image,
+      specialDay,
+    });
+
+    const savedMenu = await newSpecialMenu.save();
+    res.status(201).json(savedMenu); // <-- Only one res.json()
   } catch (error) {
-    res.status(500).json({ message: "Error saving special menu item: " + error.message });
+    res.status(500).json({ message: "Error saving special menu: " + error.message });
   }
 });
 
-// Route to delete a special menu item by ID
+// Delete a special menu item
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedItem = await deleteSpecialMenu(req, res);
+    const deletedMenu = await SpecialMenu.findByIdAndDelete(id);
+    if (!deletedMenu) {
+      return res.status(404).json({ message: "Special menu item not found" });
+    }
     res.json({ message: "Special menu item deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting special menu item: " + error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
