@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const menuItemSchema = new mongoose.Schema({
+const specialMenuItemSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -26,7 +26,11 @@ const menuItemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  specialDay: {
+    type: String, // example: "05-02"
+    required: true,
+  },
 });
 
-const Menu = mongoose.model("Menu", menuItemSchema);
-export default Menu;
+const SpecialMenu = mongoose.model("SpecialMenu", specialMenuItemSchema);
+export default SpecialMenu;

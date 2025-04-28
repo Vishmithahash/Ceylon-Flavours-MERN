@@ -37,7 +37,7 @@ const Menu = () => {
     formData.append("availability", itemAvailability);
     formData.append("category", itemCategory);
     formData.append("image", itemImage);
-    formData.append("isSpecial", isSpecial);
+    formData.append("isSpecial", isSpecial ? "true" : "false");
     formData.append("specialDay", specialDay ? specialDay.toISOString() : ""); // Save date as ISO string
 
     try {
