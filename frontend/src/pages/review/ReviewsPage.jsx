@@ -70,7 +70,6 @@ function ReviewsPage() {
       formData.append("title", updatedTitle);
       formData.append("review", updatedReview);
       formData.append("rating", updatedRating);
-
       if (updatedImage) {
         formData.append("image", updatedImage);
       }
@@ -169,8 +168,15 @@ function ReviewsPage() {
                         className="w-full h-40 object-cover rounded-md mb-2"
                       />
                     )}
-                    <input type="file" onChange={handleImageChange} className="w-full p-2 border rounded-lg mb-2" />
-                    <button onClick={handleUpdate} className="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600">
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      className="w-full p-2 border rounded-lg mb-2"
+                    />
+                    <button
+                      onClick={handleUpdate}
+                      className="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600"
+                    >
                       Update Review
                     </button>
                   </>
@@ -194,6 +200,13 @@ function ReviewsPage() {
                         alt="Review"
                         className="w-full h-40 object-cover rounded-md mb-2"
                       />
+                    )}
+                    {review.reply && (
+                      <div className="mt-2 p-2 bg-gray-100 rounded-md">
+                        <p className="text-sm text-gray-600">
+                          <strong>Reply:</strong> {review.reply}
+                        </p>
+                      </div>
                     )}
                     <button
                       onClick={() => handleEditClick(review)}
