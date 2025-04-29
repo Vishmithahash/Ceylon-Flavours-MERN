@@ -26,14 +26,6 @@ const menuItemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isSpecial: {
-    type: Boolean,
-    default: false,
-  },
-  specialDay: {
-    type: String,
-    default: "",
-  },
 });
 
 const Menu = mongoose.model("Menu", menuItemSchema);
