@@ -1,4 +1,3 @@
-// FINAL Updated FULL AddMenu.jsx with Price Cut + Special Badge ✅
 
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
