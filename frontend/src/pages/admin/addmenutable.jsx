@@ -43,9 +43,9 @@ function MenuTable() {
 
   const handleUpdate = (id, isSpecial) => {
     if (isSpecial) {
-      navigate(`/UpdateSpecialMenu/${id}`);
+      navigate(`/admin/UpdateMenu/${id}`);
     } else {
-      navigate(`/UpdateMenu/${id}`);
+      navigate(`/admin/UpdateMenu/${id}`);
     }
   };
 
@@ -181,7 +181,7 @@ function MenuTable() {
                       <td>{item.name}</td>
                       <td>{item.description}</td>
                       <td>Rs.{item.price}.00</td>
-                      <td className="text-blue-600">{item.specialDay}</td>
+                      <td className="text-blue-600">{new Date(item.specialDay).toLocaleDateString("en-GB")}</td>
                       <td className={item.availability ? "text-green-600" : "text-red-600"}>
                         {item.availability ? "Available" : "Unavailable"}
                       </td>
@@ -210,7 +210,7 @@ function MenuTable() {
 
       {/* Navigation Buttons */}
       <button
-        onClick={() => navigate("/menu", { replace: true })}
+        onClick={() => navigate("/admin/menu", { replace: true })}
         className="fixed bottom-8 right-8 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
         Add New Item
       </button>
