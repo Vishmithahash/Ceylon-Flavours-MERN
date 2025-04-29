@@ -95,7 +95,7 @@ const ReservationManagement = () => {
 
         {/* Make a Reservation Button */}
         <div className="flex justify-center mt-6">
-          <Link to="/pages/reservation/Reservation">
+          <Link to="/reservation">
             <button type="button" className="bg-[#361a1d] text-white px-6 py-3 rounded-full hover:bg-[#291316] transition duration-300">
               Make a Reservation
             </button>

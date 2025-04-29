@@ -9,6 +9,7 @@ import connectDB from "./config/db.js";  // Import connectDB
 dotenv.config();
 
 // Create Express app
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -20,6 +21,46 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+
+// Serve uploaded images as static files (only once)
+app.use("/uploads", express.static("uploads"));
+app.use("/upload", express.static("upload"));
+
+// Importing routes
+import menuRoutes from "./routes/menuroute.js";
+import deliveryRouter from "./routes/deliveryRoutes.js";
+import reservationRouter from "./routes/reservationRoutes.js";
+import reviewRoute from "./routes/reviewroute.js";
+import orderRoutes from "./routes/orderRoute.js";
+
+// Use routes
+app.use('/api/menu', menuRoutes);
+app.use("/api/delivery", deliveryRouter);
+app.use("/api/reservations", reservationRouter);   // <-- PLURAL and Correct
+app.use("/api/reviews", reviewRoute);
+app.use("/api/orders", orderRoutes);
+
+// Ensure MongoDB URL is defined
+if (!process.env.MONGODB_URL) {
+    console.error("Error: MONGODB_URL is not defined in .env file.");
+    process.exit(1);
+}
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URL)
+    .then(() => {
+        console.log("MongoDB connected successfully");
+
+        // Start server only after DB connection
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+
+    }).catch((err) => {
+        console.error("MongoDB connection error:", err);
+    });
+=======
 app.use(cookieParser());
 
 // Serve uploaded images as static files
@@ -56,3 +97,4 @@ app.use("/api/admin", adminRoutes);
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
+
