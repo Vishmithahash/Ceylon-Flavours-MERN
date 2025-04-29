@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Star, Trash2, MessageCircle, XCircle } from "lucide-react";
-
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable"; // Important: correct import!
 
 function AdminReviewPage() {
   const [reviews, setReviews] = useState([]);
@@ -70,13 +71,60 @@ function AdminReviewPage() {
     }
   };
 
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+
+    // Title
+    doc.setFontSize(18);
+    doc.text("Ceylon Flavours - Review Report", 14, 22);
+
+    // Date
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString();
+    doc.setFontSize(11);
+    doc.text(`Date: ${formattedDate}`, 14, 30);
+
+    const tableColumn = ["No", "Title", "Rating", "Email", "Review", "Reply"];
+    const tableRows = [];
+
+    filteredReviews.forEach((review, index) => {
+      tableRows.push([
+        index + 1,
+        review.title,
+        review.rating,
+        review.email,
+        review.review,
+        review.reply || "No reply",
+      ]);
+    });
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 40,
+      styles: { fontSize: 10 },
+      theme: 'striped',
+      headStyles: { fillColor: [22, 160, 133] }, // Teal header
+    });
+
+    // Page Numbers
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 10);
+    }
+
+    doc.save("review_report.pdf");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 py-8 flex flex-col">
       <div className="w-full mx-auto p-6 bg-purple-200 shadow-lg rounded-lg">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Admin Review Management</h1>
 
         {/* Search Bar */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <input
             type="text"
             placeholder="Search by title..."
@@ -87,7 +135,7 @@ function AdminReviewPage() {
         </div>
 
         {/* Category Filter */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           {["1", "2", "3", "4", "5", "All"].map((category) => (
             <button
               key={category}
@@ -101,6 +149,16 @@ function AdminReviewPage() {
           ))}
         </div>
 
+        {/* PDF Export Button */}
+        <div className="text-center mb-6">
+          <button
+            onClick={handleExportPDF}
+            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          >
+            Download PDF Report
+          </button>
+        </div>
+
         {/* Reviews List */}
         {filteredReviews.length === 0 ? (
           <p className="text-gray-600 text-center">No reviews available.</p>
@@ -108,7 +166,6 @@ function AdminReviewPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredReviews.map((review) => (
               <div key={review._id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
-                {/* User Image */}
                 {review.image && (
                   <img
                     src={`http://localhost:5000/upload/${review.image}`}
@@ -116,17 +173,9 @@ function AdminReviewPage() {
                     className="w-full h-40 object-cover rounded-md mb-4"
                   />
                 )}
-
-                {/* Review Title */}
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{review.title}</h3>
-
-                {/* Review Comment */}
                 <p className="text-gray-600 mb-2">{review.review}</p>
-
-                {/* Email */}
                 <p className="text-gray-500 text-sm">{review.email}</p>
-
-                {/* Star Rating */}
                 <div className="flex mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -136,8 +185,13 @@ function AdminReviewPage() {
                     />
                   ))}
                 </div>
-
-                {/* Admin Actions */}
+                {review.reply && (
+                  <div className="mt-2 p-2 bg-gray-100 rounded-md">
+                    <p className="text-sm text-gray-600">
+                      <strong>Reply:</strong> {review.reply}
+                    </p>
+                  </div>
+                )}
                 <div className="mt-4 flex justify-between">
                   <button
                     className="flex items-center px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
@@ -145,7 +199,6 @@ function AdminReviewPage() {
                   >
                     <MessageCircle size={16} className="mr-2" /> Reply
                   </button>
-
                   <button
                     className="flex items-center px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                     onClick={() => handleDelete(review._id)}
