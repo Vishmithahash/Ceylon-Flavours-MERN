@@ -34,70 +34,6 @@ function Header() {
           {/* Center Navigation */}
           <nav className="flex-1 flex justify-center">
             <ul className="flex space-x-6 text-lg items-center">
-
-
-              <li>
-                <Link
-                  to="/"
-                  className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
-                >
-                  Home
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/addmenu"
-                  className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
-                >
-                  Menu
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/reservation-management"
-                  className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
-                >
-                  Reservations
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/reviewform"
-                  className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
-                >
-                  Ratings
-                </Link>
-              </li>
-              <li className="relative">
-                <Link
-                  to="/cart"
-                  className="transition-all duration-300 ease-in-out hover:text-yellow-300"
-                >
-                  Cart
-                </Link>
-
-
-
-                <li>
-                <Link
-                  to="/admin/dashboard"
-                  className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
-                >
-                  Admin
-                </Link>
-              </li>
-
-
-
-
-                {totalCartItems > 0 && (
-                  <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full shadow-lg">
-                    {totalCartItems}
-                  </span>
-                )}
-              </li>
-
               {[
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
@@ -119,7 +55,6 @@ function Header() {
                   )}
                 </li>
               ))}
-
             </ul>
           </nav>
 
