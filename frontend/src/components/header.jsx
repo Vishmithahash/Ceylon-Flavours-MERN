@@ -19,14 +19,16 @@ function Header() {
           {/* Navigation */}
           <nav>
             <ul className="flex space-x-6 text-lg items-center">
+
               <li>
                 <Link
-                  to="/pages/home/home"
+                  to="/"
                   className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
                 >
                   Home
                 </Link>
               </li>
+
               <li>
                 <Link
                   to="/addmenu"
@@ -37,7 +39,7 @@ function Header() {
               </li>
               <li>
                 <Link
-                  to="/pages/reservation/ReservationBackground"
+                  to="/reservation-management"
                   className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
                 >
                   Reservations
@@ -58,6 +60,21 @@ function Header() {
                 >
                   Cart
                 </Link>
+
+
+
+                <li>
+                <Link
+                  to="/admin/dashboard"
+                  className="relative transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out after:hover:w-full"
+                >
+                  Admin
+                </Link>
+              </li>
+
+
+
+
                 {totalCartItems > 0 && (
                   <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full shadow-lg">
                     {totalCartItems}

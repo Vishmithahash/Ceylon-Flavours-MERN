@@ -1,39 +1,42 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-    name : {
-        type : String, required : true,
+
+const reservationSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
     },
-
-    email : {
-        type : String, required : true,
+    phone: {                         // <-- Added
+        type: String,
+        required: true
     },
-
-    phone : {
-        type : Number, required : true,
-
+    email: {
+        type: String,
+        required: true
     },
     date: {
-        type: String, required: true,
+        type: String,
+        required: true
     },
-
     time: {
-        type: String, required: true,
+        type: String,
+        required: true
     },
-
-
-    no_of_guests: {
-        type: Number, required: true,
+    people: {
+        type: Number,
+        required: true
     },
-
-    table_category: {
-        type: String, enum: ["Normal", "VIP"], required: true, default: "Normal",  // Set a default value if none is provided
-      },
-
-      notes: {
-        type: String, required: false,
+    table_category: {                 // <-- Added
+        type: String,
+        enum: ["Normal", "VIP"],       // Limit choices to Normal or VIP
+        required: true
     },
+    specialRequest: {
+        type: String
+    }
+}, { timestamps: true });
 
-})
-const reservation = mongoose.model("Reservations",userSchema)
-export default reservation
+export default mongoose.model("Reservation", reservationSchema);
+
+
+
