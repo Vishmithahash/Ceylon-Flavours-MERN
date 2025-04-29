@@ -1,12 +1,28 @@
-import React from 'react';
-import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // Import Cart Context
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 
 function Header() {
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
+  const { user, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  // Calculate total quantity of cart items
   const totalCartItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const handleLogout = () => {
+    const confirmed = window.confirm("Are you sure you want to logout?");
+    if (confirmed) {
+      localStorage.removeItem("token");
+      clearCart();
+      setUser(null);
+      navigate("/");
+    }
+  };
+
+  const profileImage = user?.profileImage
+    ? `http://localhost:5000/${user.profileImage}`
+    : "/default-profile.png";
 
   return (
     <div id="navcontent">
@@ -15,10 +31,10 @@ function Header() {
           {/* Logo */}
           <h1 className="text-2xl font-extrabold tracking-wide">Ceylon Flavors</h1>
 
-
-          {/* Navigation */}
-          <nav>
+          {/* Center Navigation */}
+          <nav className="flex-1 flex justify-center">
             <ul className="flex space-x-6 text-lg items-center">
+
 
               <li>
                 <Link
@@ -81,13 +97,75 @@ function Header() {
                   </span>
                 )}
               </li>
+
+              {[
+                { path: "/", label: "Home" },
+                { path: "/addmenu", label: "Menu" },
+                { path: "/reservation", label: "Reservations" },
+                { path: "/reviewform", label: "Ratings" },
+                { path: "/cart", label: "Cart" },
+              ].map((item) => (
+                <li key={item.label} className="relative">
+                  <Link
+                    to={item.path}
+                    className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+                  >
+                    {item.label}
+                  </Link>
+                  {item.path === "/cart" && totalCartItems > 0 && (
+                    <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full shadow-lg">
+                      {totalCartItems}
+                    </span>
+                  )}
+                </li>
+              ))}
+
             </ul>
           </nav>
+
+          {/* Profile Image + Login/Logout */}
+          <div className="flex items-center space-x-4">
+            <div
+              className="flex flex-col items-center cursor-pointer"
+              onClick={() => {
+                if (user) {
+                  navigate("/profile");
+                } else {
+                  alert("You need to register first to access the profile.");
+                }
+              }}
+            >
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-10 h-10 rounded-full border-2 border-white object-cover"
+              />
+              <span className="text-xs text-gray-300 mt-1">
+                {user ? user.name : "Guest"}
+              </span>
+            </div>
+
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition"
+              >
+                Login
+              </Link>
+            )}
+          </div>
+
         </div>
       </header>
     </div>
   );
-
 }
 
 export default Header;

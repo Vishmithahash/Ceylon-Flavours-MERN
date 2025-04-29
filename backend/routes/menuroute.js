@@ -20,43 +20,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Utility function to get today's date in "MM-DD" format
-const getTodayDate = () => {
-  const today = new Date();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  return `${month}-${day}`;
-};
-
-// Utility function to check if today is a weekend
-const isWeekend = () => {
-  const today = new Date();
-  const day = today.getDay();
-  return day === 0 || day === 6; // 0: Sunday, 6: Saturday
-};
-
-// Predefined special days (MM-DD format)
-const specialDays = ["02-14", "04-14", "12-25", "12-31"];
-
-// Route to get all menu items (including special menus)
+// Route to get all menu items
 router.get("/", async (req, res) => {
   try {
-    let items;
-    const todayDate = getTodayDate();
-
-    // Check if today is a special day or weekend
-    const isSpecialDay = specialDays.includes(todayDate) || isWeekend();
-
-    if (isSpecialDay) {
-      // Fetch both special and regular menu items on special days or weekends
-      const specialItems = await Menu.find({ isSpecial: true });
-      const regularItems = await Menu.find({ isSpecial: false });
-      items = [...specialItems, ...regularItems];
-    } else {
-      // Fetch only regular menu items on normal days
-      items = await Menu.find({ isSpecial: false });
-    }
-
+    const items = await Menu.find({});
     res.json(items);
   } catch (error) {
     res.status(500).json({ message: "Server error: " + error.message });
@@ -79,7 +46,7 @@ router.get("/:id", async (req, res) => {
 
 // Route to add a new menu item
 router.post("/", upload.single("image"), async (req, res) => {
-  const { name, description, price, availability, category, isSpecial, specialDay } = req.body;
+  const { name, description, price, availability, category } = req.body;
   const image = req.file ? req.file.filename : null;
 
   // Validate input fields
@@ -96,8 +63,6 @@ router.post("/", upload.single("image"), async (req, res) => {
       availability: availability ?? true,
       category,
       image,
-      isSpecial: Boolean(isSpecial),  // Mark as special menu if indicated
-      specialDay: specialDay || null, // Store special day if provided
     });
 
     // Save the new item to the database
@@ -111,14 +76,13 @@ router.post("/", upload.single("image"), async (req, res) => {
 // Route to update an existing menu item
 router.put("/:id", upload.single("image"), async (req, res) => {
   const { id } = req.params;
-  const { name, description, price, availability, category, isSpecial, specialDay } = req.body;
+  const { name, description, price, availability, category } = req.body;
   const image = req.file ? req.file.filename : null;
 
   try {
-    // Find the menu item by ID and update it with new data
     const updatedItem = await Menu.findByIdAndUpdate(
       id,
-      { name, description, price: parseFloat(price), availability, category, image, isSpecial, specialDay },
+      { name, description, price: parseFloat(price), availability, category, image },
       { new: true } // Return the updated item
     );
 
@@ -137,7 +101,6 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Find the menu item by ID and delete it from the database
     const deletedItem = await Menu.findByIdAndDelete(id);
 
     if (!deletedItem) {
