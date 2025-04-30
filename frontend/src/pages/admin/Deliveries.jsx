@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AssignDelivery from "./AssignDelivery";
 import ManageDeliveryPersonnel from "./ManageDeliveryPersonnel";
 
+
 const Deliveries = () => {
   const [activeTab, setActiveTab] = useState("assign");
 
