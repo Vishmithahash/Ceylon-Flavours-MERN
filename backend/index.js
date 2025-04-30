@@ -50,6 +50,7 @@ import orderRoutes from "./routes/orderRoute.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import deliveryAssignmentRoutes from "./routes/deliveryAssignmentRoutes.js";
 
 // Route usage
 app.use("/api/menu", menuRoutes);
@@ -61,6 +62,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/delivery-assignment", deliveryAssignmentRoutes);
 
 // Start server (ONLY ONE app.listen!)
 app.listen(PORT, () => {

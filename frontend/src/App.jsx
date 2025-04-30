@@ -31,6 +31,8 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Profile from "./pages/auth/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import Deliveries from "./pages/Delivery/Deliveries";
+import DeliveryDashboard from "./pages/Delivery/DeliveryDashboard";
 
 function App() {
   const location = useLocation();
@@ -73,6 +75,8 @@ function App() {
           <Route path="/updatemenu/:id" element={<ProtectedRoute><UpdateMenu /></ProtectedRoute>} />
           <Route path="/admin-orders" element={<ProtectedRoute><AdminOrder /></ProtectedRoute>} />
           <Route path="/adminreviewpage" element={<ProtectedRoute><AdminReviewPage /></ProtectedRoute>} />
+          <Route path="/admin/deliveries" element={<Deliveries />} />
+          <Route path="/delivery-dashboard" element={<DeliveryDashboard />} />
 
         </Routes>
         {!isAuthPage && <Footer />}
