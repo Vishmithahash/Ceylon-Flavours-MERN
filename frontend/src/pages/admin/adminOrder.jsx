@@ -6,7 +6,7 @@ function AdminOrder() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("All");
 
-  //  Fetch Orders from Backend
+  // Fetch Orders from Backend
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -20,10 +20,12 @@ function AdminOrder() {
     fetchOrders();
   }, []);
 
-  //  Confirm Order Function
+  // Confirm Order Function
   const handleConfirmOrder = async (orderId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/orders/${orderId}`, { status: "Confirmed" });
+      await axios.patch(`http://localhost:5000/api/orders/${orderId}`, {
+        status: "Confirmed",
+      });
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId ? { ...order, status: "Confirmed" } : order
@@ -38,27 +40,32 @@ function AdminOrder() {
   const handleCancelOrder = async (orderId) => {
     try {
       await axios.delete(`http://localhost:5000/api/orders/${orderId}`);
-      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+      setOrders((prevOrders) =>
+        prevOrders.filter((order) => order._id !== orderId)
+      );
     } catch (error) {
       console.error("Error canceling order:", error);
     }
   };
 
-  // Filter and Search function
-  const filteredOrders = orders.filter((order) => {
-    return (
-      (filter === "All" || order.status === filter) &&
-      (order.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.customer.phone.includes(searchTerm) ||
-        order.customer.email.toLowerCase().includes(searchTerm))
-    );
-  });
+  // Filter and Search function with safe checks
+  const filteredOrders = orders
+    .filter((order) => order.customer) // only include orders with customer data
+    .filter((order) => {
+      const customer = order.customer;
+      return (
+        (filter === "All" || order.status === filter) &&
+        (customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          customer.phone?.includes(searchTerm) ||
+          customer.email?.toLowerCase().includes(searchTerm))
+      );
+    });
 
   return (
     <div className="container mx-auto p-8">
       <div className="flex flex-col items-center mb-6">
-        <h1 className="text-4xl font-bold mb-4">Orders</h1> 
-        
+        <h1 className="text-4xl font-bold mb-4">Orders</h1>
+
         {/* Search & Filter */}
         <div className="flex gap-4">
           <input
@@ -92,7 +99,7 @@ function AdminOrder() {
               <th className="p-4 border">Address</th>
               <th className="p-4 border">Order Type</th>
               <th className="p-4 border">Total Payment</th>
-              <th className="p-4 border w-56">Actions</th> 
+              <th className="p-4 border w-56">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -116,12 +123,12 @@ function AdminOrder() {
                   ))}
                 </td>
 
-                {/* Customer Details */}
-                <td className="p-4 border">{order.customer.name}</td>
-                <td className="p-4 border">{order.customer.phone}</td>
-                <td className="p-4 border">{order.customer.email}</td>
-                <td className="p-4 border">{order.customer.address}</td>
-                <td className="p-4 border">{order.customer.orderType}</td>
+                {/* Customer Details with fallback */}
+                <td className="p-4 border">{order.customer?.name || "N/A"}</td>
+                <td className="p-4 border">{order.customer?.phone || "N/A"}</td>
+                <td className="p-4 border">{order.customer?.email || "N/A"}</td>
+                <td className="p-4 border">{order.customer?.address || "N/A"}</td>
+                <td className="p-4 border">{order.customer?.orderType || "N/A"}</td>
                 <td className="p-4 border font-bold">Rs. {order.total}.00</td>
 
                 {/* Actions */}

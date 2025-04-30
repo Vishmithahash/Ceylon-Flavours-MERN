@@ -11,17 +11,19 @@ import Menu from "./pages/admin/Menu";
 import MenuTable from "./pages/admin/addmenutable";
 import UpdateMenu from "./pages/admin/updatemenu";
 import PlaceOrder from "./pages/order/placeOrder";
-import AdminOrder from "./pages/AdminOrder/adminOrder";
+import AdminOrder from "./pages/admin/adminOrder";
 import OrderStatus from "./pages/OrderStatus/orderStatus";
 import UpdatePlaceOrder from "./pages/order/updatePlaceOrder";
 import ReviewForm from "./pages/review/ReviewForm";
 import ReviewsPage from "./pages/review/ReviewsPage";
-import AdminReviewPage from "./pages/review/AdminReviewPage";
+import AdminReviewPage from "./pages/admin/AdminReviewPage";
 import Reservation from "./pages/reservation/Reservation";
-import ReservationList from "./pages/reservation/reservationList";
+import ReservationList from "./pages/admin/reservationList";
 import ReservationManagement from "./pages/reservation/ReservationBackground";
 import HomePage from "./pages/home/home"; 
 import Delivery from "./pages/Delivery/delivery";
+import UserReservations from "./pages/reservation/UserReservations";
+
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -65,16 +67,19 @@ function App() {
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/reservation-management" element={<ReservationManagement />} />
-          <Route path="/reservation-list" element={<ReservationList />} />
+        
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+
 
           {/* Admin Pages with AdminLayout */}
           <Route path="/admin-dashboard" element={<ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/addmenutable" element={<ProtectedRoute><AdminLayout><MenuTable /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/menu" element={<ProtectedRoute><AdminLayout><Menu /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/updatemenu/:id" element={<ProtectedRoute><AdminLayout><UpdateMenu /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin-orders" element={<ProtectedRoute><AdminLayout><AdminOrder /></AdminLayout></ProtectedRoute>} />
-          <Route path="/adminreviewpage" element={<ProtectedRoute><AdminLayout><AdminReviewPage /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/admin-orders" element={<ProtectedRoute><AdminLayout><AdminOrder /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/adminreviewpage" element={<ProtectedRoute><AdminLayout><AdminReviewPage /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/reservation-list" element={<ProtectedRoute><AdminLayout><ReservationList /></AdminLayout></ProtectedRoute>} />
 
         </Routes>
         {!isAuthPage && <Footer />}

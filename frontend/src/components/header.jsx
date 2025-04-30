@@ -26,7 +26,7 @@ function Header() {
 
   return (
     <div id="navcontent">
-      <header className="bg-[#361a1d] text-white p-4 shadow-lg">
+      <header className="bg-[#100f21] text-white p-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <h1 className="text-2xl font-extrabold tracking-wide">Ceylon Flavors</h1>
@@ -37,7 +37,7 @@ function Header() {
               {[
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
-                { path: "/reservation", label: "Reservations" },
+                { path: "/reservation-management", label: "Reservations" },
                 { path: "/reviewform", label: "Ratings" },
                 { path: "/cart", label: "Cart" },
               ].map((item) => (
