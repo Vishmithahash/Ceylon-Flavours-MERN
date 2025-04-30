@@ -2,13 +2,18 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    customer: {
-      name: { type: String, required: true },
-      phone: { type: String, required: true },
-      email: { type: String, required: true },
-      address: { type: String, required: true },
-      orderType: { type: String, required: true },
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
+    name: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true },
+    address: { type: String },       // optional for Pick up
+    postalCode: { type: String },    // optional for Pick up
+    orderType: { type: String, required: true },
+
     items: [
       {
         name: String,
@@ -20,9 +25,9 @@ const orderSchema = new mongoose.Schema(
     subtotal: { type: Number, required: true },
     deliveryFee: { type: Number, required: true },
     total: { type: Number, required: true },
-    status: { type: String, default: "Pending" }, // Default order status
+    status: { type: String, default: "Pending" },
   },
-  { timestamps: true } //  Auto add createdAt, updatedAt fields
+  { timestamps: true }
 );
 
 export default mongoose.model("Order", orderSchema);

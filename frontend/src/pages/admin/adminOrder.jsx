@@ -1,5 +1,8 @@
+// pages/AdminOrder/adminOrder.jsx
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AdminHeader from "../../components/AdminHeader";
 
 function AdminOrder() {
   const [orders, setOrders] = useState([]);
@@ -10,7 +13,15 @@ function AdminOrder() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/orders");
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/orders", {
+          headers: { Authorization: `Bearer ${token}` }, // ✅ Send token
+        });
         setOrders(response.data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -23,9 +34,20 @@ function AdminOrder() {
   // Confirm Order Function
   const handleConfirmOrder = async (orderId) => {
     try {
+
+      const token = localStorage.getItem("token");
+      await axios.patch(
+        `http://localhost:5000/api/orders/${orderId}`,
+        { status: "Confirmed" },
+        {
+          headers: { Authorization: `Bearer ${token}` }, // ✅ Send token
+        }
+      );
+
       await axios.patch(`http://localhost:5000/api/orders/${orderId}`, {
         status: "Confirmed",
       });
+
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId ? { ...order, status: "Confirmed" } : order
@@ -39,10 +61,18 @@ function AdminOrder() {
   // Cancel Order Function
   const handleCancelOrder = async (orderId) => {
     try {
+
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:5000/api/orders/${orderId}`, {
+        headers: { Authorization: `Bearer ${token}` }, // ✅ Send token
+      });
+      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+
       await axios.delete(`http://localhost:5000/api/orders/${orderId}`);
       setOrders((prevOrders) =>
         prevOrders.filter((order) => order._id !== orderId)
       );
+
     } catch (error) {
       console.error("Error canceling order:", error);
     }
