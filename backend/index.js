@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import clarifaiProxy from "./routes/clarifaiProxy.js";
 
 // Load environment variables FIRST
 dotenv.config();
@@ -61,6 +62,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/clarifai", clarifaiProxy);
 
 // Start server (ONLY ONE app.listen!)
 app.listen(PORT, () => {

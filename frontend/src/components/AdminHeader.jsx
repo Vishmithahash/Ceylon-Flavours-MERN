@@ -21,7 +21,7 @@ const AdminHeader = () => {
               </Link>
             </li>
             <li>
-              <Link to="/menutable" className="hover:text-yellow-300">
+              <Link to="/admin/addmenutable" className="hover:text-yellow-300">
                 Menu
               </Link>
             </li>
