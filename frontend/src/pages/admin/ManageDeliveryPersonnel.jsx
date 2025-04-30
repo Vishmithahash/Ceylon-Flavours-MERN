@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Delivery = () => {
+const ManageDeliveryPersonnel = () => {
   const [deliveries, setDeliveries] = useState([]);
   const [form, setForm] = useState({
     DeliveryPersonID: "",
@@ -291,4 +291,4 @@ const Delivery = () => {
   );
 };
 
-export default Delivery;
+export default ManageDeliveryPersonnel;
