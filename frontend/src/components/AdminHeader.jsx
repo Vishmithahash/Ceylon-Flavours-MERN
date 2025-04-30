@@ -16,57 +16,53 @@ const AdminHeader = () => {
         <nav>
           <ul className="flex space-x-6 text-lg items-center">
             <li>
-              <Link to="/admin-dashboard" className="hover:text-yellow-300">
+              <Link
+                to="/admin-dashboard"
+                className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              >
                 Dashboard
               </Link>
             </li>
             <li>
-              <Link to="/admin/addmenutable" className="hover:text-yellow-300">
+              <Link
+                to="/admin/addmenutable"
+                className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              >
                 Menu
               </Link>
-              
             </li>
-
             <li>
-
-              <Link to="/reservation-list" className="hover:text-yellow-300">
-
-              <Link to="/admin/reservation-list" className="hover:text-yellow-300">
-
+              <Link
+                to="/admin/reservation-list"
+                className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              >
                 Reservations
               </Link>
-              
             </li>
-
             <li>
-
-              <Link to="/admin-orders" className="hover:text-yellow-300">
-
-              <Link to="/admin/admin-orders" className="hover:text-yellow-300">
-
+              <Link
+                to="/admin/admin-orders"
+                className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              >
                 Orders
               </Link>
             </li>
-
             <li>
-              <Link to="" className="hover:text-yellow-300">
+              <Link
+                to="/admin/delivery"
+                className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              >
                 Deliveries
               </Link>
             </li>
-
             <li>
-
-              <Link to="" className="hover:text-yellow-300">
-
-              <Link to="/admin/adminreviewpage" className="hover:text-yellow-300">
-
+              <Link
+                to="/admin/adminreviewpage"
+                className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+              >
                 Reviews
               </Link>
             </li>
-
-
-
-
             <li>
               <button
                 onClick={handleBackToSite}
