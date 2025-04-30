@@ -33,12 +33,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Profile from "./pages/auth/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-
-import Deliveries from "./pages/Delivery/Deliveries";
-import DeliveryDashboard from "./pages/Delivery/DeliveryDashboard";
-
 import AdminLayout from "./layouts/AdminLayout";
-
 
 function App() {
   const location = useLocation();
@@ -78,16 +73,6 @@ function App() {
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
 
 
-          {/* Admin Pages */}
-          <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/menutable" element={<ProtectedRoute><MenuTable /></ProtectedRoute>} />
-          <Route path="/updatemenu/:id" element={<ProtectedRoute><UpdateMenu /></ProtectedRoute>} />
-          <Route path="/admin-orders" element={<ProtectedRoute><AdminOrder /></ProtectedRoute>} />
-          <Route path="/adminreviewpage" element={<ProtectedRoute><AdminReviewPage /></ProtectedRoute>} />
-          <Route path="/admin/deliveries" element={<Deliveries />} />
-          <Route path="/delivery-dashboard" element={<DeliveryDashboard />} />
-
-
           {/* Admin Pages with AdminLayout */}
           <Route path="/admin-dashboard" element={<ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/addmenutable" element={<ProtectedRoute><AdminLayout><MenuTable /></AdminLayout></ProtectedRoute>} />
@@ -96,7 +81,6 @@ function App() {
           <Route path="/admin/admin-orders" element={<ProtectedRoute><AdminLayout><AdminOrder /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/adminreviewpage" element={<ProtectedRoute><AdminLayout><AdminReviewPage /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/reservation-list" element={<ProtectedRoute><AdminLayout><ReservationList /></AdminLayout></ProtectedRoute>} />
-
 
         </Routes>
         {!isAuthPage && <Footer />}
