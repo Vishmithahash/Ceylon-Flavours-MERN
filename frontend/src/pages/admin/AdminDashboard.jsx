@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import AdminHeader from "../../components/AdminHeader";
+
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -44,8 +44,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <>
-      <AdminHeader />
+    <> 
       <div className="p-8 min-h-screen bg-gray-100">
         <h2 className="text-3xl font-bold mb-6 text-center text-indigo-700">Admin Dashboard</h2>
 
