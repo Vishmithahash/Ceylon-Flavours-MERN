@@ -30,37 +30,7 @@ const AdminHeader = () => {
               >
                 Menu
               </Link>
-              
             </li>
-
-            <li>
-              <Link to="/reservation-list" className="hover:text-yellow-300">
-                Reservations
-              </Link>
-              
-            </li>
-
-            <li>
-              <Link to="/admin-orders" className="hover:text-yellow-300">
-                Orders
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/admin/deliveries" className="hover:text-yellow-300">
-                Deliveries
-              </Link>
-            </li>
-
-            <li>
-              <Link to="" className="hover:text-yellow-300">
-                Reviews
-              </Link>
-            </li>
-
-
-
-
             <li>
               <Link
                 to="/admin/reservation-list"
