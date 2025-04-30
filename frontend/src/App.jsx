@@ -1,16 +1,15 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/header";
-import AdminHeader from "./components/AdminHeader";
 import Footer from "./components/footer";
 import { CartProvider } from "./context/CartContext";
 
 // Pages
 import AddCart from "./pages/AddtoCart/AddCart";
 import AddMenu from "./pages/AddMenu/addmenu";
-import Menu from "./pages/menu/Menu";
-import MenuTable from "./pages/AddMenuTable/addmenutable";
-import UpdateMenu from "./pages/UpdateMenu/updatemenu";
+import Menu from "./pages/admin/Menu";
+import MenuTable from "./pages/admin/addmenutable";
+import UpdateMenu from "./pages/admin/updatemenu";
 import PlaceOrder from "./pages/order/placeOrder";
 import AdminOrder from "./pages/AdminOrder/adminOrder";
 import OrderStatus from "./pages/OrderStatus/orderStatus";
@@ -33,6 +32,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Profile from "./pages/auth/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   const location = useLocation();
@@ -40,11 +40,13 @@ function App() {
   const authPaths = ["/login", "/register", "/forgot-password", "/reset-password"];
 
   const isAuthPage = authPaths.some((path) => location.pathname.startsWith(path));
+  
 
   return (
     <CartProvider>
       <div id="wrapper" className="flex flex-col min-h-screen">
-        {!isAuthPage && <Header />}
+      {!isAuthPage && !location.pathname.startsWith("/admin") && <Header />}
+
         <Routes>
 
           {/* Auth Pages */}
@@ -55,7 +57,6 @@ function App() {
 
           {/* User Pages */}
           <Route path="/" element={<HomePage />} /> 
-          <Route path="/menu" element={<Menu />} />
           <Route path="/addmenu" element={<AddMenu />} />
           <Route path="/cart" element={<AddCart />} />
           <Route path="/place-order" element={<PlaceOrder />} />
@@ -71,12 +72,13 @@ function App() {
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
 
 
-          {/* Admin Pages */}
-          <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/menutable" element={<ProtectedRoute><MenuTable /></ProtectedRoute>} />
-          <Route path="/updatemenu/:id" element={<ProtectedRoute><UpdateMenu /></ProtectedRoute>} />
-          <Route path="/admin-orders" element={<ProtectedRoute><AdminOrder /></ProtectedRoute>} />
-          <Route path="/adminreviewpage" element={<ProtectedRoute><AdminReviewPage /></ProtectedRoute>} />
+          {/* Admin Pages with AdminLayout */}
+          <Route path="/admin-dashboard" element={<ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/addmenutable" element={<ProtectedRoute><AdminLayout><MenuTable /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/menu" element={<ProtectedRoute><AdminLayout><Menu /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/updatemenu/:id" element={<ProtectedRoute><AdminLayout><UpdateMenu /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin-orders" element={<ProtectedRoute><AdminLayout><AdminOrder /></AdminLayout></ProtectedRoute>} />
+          <Route path="/adminreviewpage" element={<ProtectedRoute><AdminLayout><AdminReviewPage /></AdminLayout></ProtectedRoute>} />
 
         </Routes>
         {!isAuthPage && <Footer />}
