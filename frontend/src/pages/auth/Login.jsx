@@ -1,3 +1,5 @@
+// login.jsx
+
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,9 +12,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-
-  
-  
 
   const handleLogin = async (isAdminLogin) => {
     try {
@@ -43,17 +42,9 @@ const Login = () => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user", JSON.stringify(loggedInUser)); // ✅ Save user
           setUser(loggedInUser);
-          // For normal user login
-        if (res.data.success) {
-        const loggedInUser = res.data.user;
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(loggedInUser));
-        setUser(loggedInUser);
-  
-        alert("Login Successful!");
-        window.location.replace("/");  // ✅ Replace page - no back to login
-    }
-  
+
+          alert("Login Successful!");
+          window.location.replace("/");  // ✅ Replace page - no back to login
         }
       }
     } catch (error) {
@@ -108,29 +99,29 @@ const Login = () => {
           </div>
 
           <div className="flex flex-col space-y-3">
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-          >
-            Login
-          </button>
-        
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+            >
+              Login
+            </button>
 
-        <button
-          onClick={() => handleLogin(true)}
-          className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 mt-4"
-        >
-          Login as Admin
-        </button>
+            <button
+              type="button"
+              onClick={() => handleLogin(true)}
+              className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 mt-4"
+            >
+              Login as Admin
+            </button>
 
-        <button
+            <button
               type="button"
               onClick={() => navigate("/")}
               className="w-full bg-gray-400 hover:bg-gray-500 text-white py-2 rounded-lg transition"
             >
               Cancel
             </button>
-        </div>
+          </div>
         </form>
 
         <div className="text-center mt-4">
