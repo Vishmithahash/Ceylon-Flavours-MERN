@@ -22,7 +22,7 @@ import Reservation from "./pages/reservation/Reservation";
 import ReservationList from "./pages/admin/reservationList";
 import ReservationManagement from "./pages/reservation/ReservationBackground";
 import HomePage from "./pages/home/home"; 
-import Delivery from "./pages/Delivery/delivery";
+
 import UserReservations from "./pages/reservation/UserReservations";
 
 
@@ -33,12 +33,10 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Profile from "./pages/auth/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-
-import Deliveries from "./pages/Delivery/Deliveries";
-import DeliveryDashboard from "./pages/Delivery/DeliveryDashboard";
-
 import AdminLayout from "./layouts/AdminLayout";
-
+import Deliveries from "./pages/admin/Deliveries";
+import ManageDeliveryPersonnel from "./pages/admin/ManageDeliveryPersonnel";
+import AddDeliveryPersonnel from "./pages/admin/AssignDelivery";
 
 function App() {
   const location = useLocation();
@@ -70,22 +68,11 @@ function App() {
           <Route path="/update-order/:id" element={<UpdatePlaceOrder />} />
           <Route path="/reviewform" element={<ReviewForm />} />
           <Route path="/reviewspage" element={<ReviewsPage />} />
-          <Route path="/delivery" element={<Delivery />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/reservation-management" element={<ReservationManagement />} />
         
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
-
-
-          {/* Admin Pages */}
-          <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/menutable" element={<ProtectedRoute><MenuTable /></ProtectedRoute>} />
-          <Route path="/updatemenu/:id" element={<ProtectedRoute><UpdateMenu /></ProtectedRoute>} />
-          <Route path="/admin-orders" element={<ProtectedRoute><AdminOrder /></ProtectedRoute>} />
-          <Route path="/adminreviewpage" element={<ProtectedRoute><AdminReviewPage /></ProtectedRoute>} />
-          <Route path="/admin/deliveries" element={<Deliveries />} />
-          <Route path="/delivery-dashboard" element={<DeliveryDashboard />} />
 
 
           {/* Admin Pages with AdminLayout */}
@@ -96,7 +83,11 @@ function App() {
           <Route path="/admin/admin-orders" element={<ProtectedRoute><AdminLayout><AdminOrder /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/adminreviewpage" element={<ProtectedRoute><AdminLayout><AdminReviewPage /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/reservation-list" element={<ProtectedRoute><AdminLayout><ReservationList /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/delivery" element={<ProtectedRoute><AdminLayout><Deliveries /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/manage-delivery-personnel" element={<ProtectedRoute><AdminLayout><ManageDeliveryPersonnel /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/add-delivery-personnel" element={<ProtectedRoute><AdminLayout><AddDeliveryPersonnel /></AdminLayout></ProtectedRoute>} />
 
+          {/* 404 Page */}
 
         </Routes>
         {!isAuthPage && <Footer />}
