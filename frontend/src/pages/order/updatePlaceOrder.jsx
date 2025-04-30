@@ -5,6 +5,40 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+const allColomboAreas = [
+  "colombo", "pettah", "fort", "bambalapitiya", "kollupitiya", "maradana",
+  "wellawatte", "dematagoda", "borella", "havelock town", "slave island",
+  "thimbirigasyaya", "kirulapone", "mutwal", "grandpass", "orugodawatta",
+  "wellampitiya", "meethotamulla", "panchikawatta", "maligawatta",
+  "bloemendhal", "hultsdorf", "wolvendhal", "nawala", "nugegoda",
+  "rajagiriya", "pita kotte", "ethul kotte", "pelawatte", "battaramulla",
+  "koswatta", "talawatugoda", "malabe", "kottawa", "maharagama",
+  "pannipitiya", "dehiwala", "mt lavinia", "ratmalana", "boralesgamuwa",
+  "bellanwila", "madiwela", "hokandara", "moratuwa", "angulana",
+  "piliyandala", "kesbewa", "kotikawatta", "kolonnawa", "angoda",
+  "kiribathgoda", "nabimana", "delkanda", "thalahena", "mulleriyawa",
+  "udahamulla", "kohuwala", "pagoda", "polhengoda", "kalubowila",
+  "sri jayawardenepura", "hendala", "udahamulla north",
+  "udahamulla south", "wijerama", "madiwela west", "rathmaldeniya",
+  "mirihana", "kawdana", "nadimala", "pepiliyana", "wattegedara",
+  "homagama", "meegoda", "padukka", "hanwella", "avissawella", "godagama",
+  "pitipana", "watareka", "pallebedda", "raththanapitiya", "weligama junction",
+  "athurugiriya", "habarakada", "polgasowita", "madapatha", "katuwawala",
+  "rukmalgama", "talahena east", "idama", "makumbura", "mattegoda",
+  "galawila", "werahera", "bokundara", "kiriwaththuduwa", "gonapola",
+  "kandana (partial)", "siyambalape", "henpita", "pitumpe", "dolekade",
+  "millaniya (partial)"
+];
+
+const isKnownColomboArea = (address) => {
+  const lowerAddress = address.toLowerCase();
+  return allColomboAreas.some((area) => lowerAddress.includes(area));
+};
+
+const isAddressInColombo = (address) => {
+  return address.toLowerCase().includes("colombo district");
+};
+
 function UpdatePlaceOrder() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,10 +66,6 @@ function UpdatePlaceOrder() {
     "10680", "10682", "10700", "10704", "10712", "10714", "10718", "10730"
   ];
 
-  const isAddressInColombo = (address) => {
-    return address.toLowerCase().includes("colombo district");
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUpdatedOrder((prev) => ({
@@ -46,7 +76,7 @@ function UpdatePlaceOrder() {
     if (name === "postalCode" && updatedOrder.orderType === "Cash on Delivery" && !value.trim()) {
       setErrors((prev) => ({
         ...prev,
-        postalCode: "⚠️ Postal Code is required.",
+        postalCode: "\u26A0\uFE0F Postal Code is required.",
       }));
     } else {
       setErrors((prev) => ({
@@ -73,15 +103,15 @@ function UpdatePlaceOrder() {
     const { name, phone, email, address, postalCode, orderType, items, subtotal, deliveryFee, total } = updatedOrder;
 
     if (!name || !phone || !email || (orderType === "Cash on Delivery" && (!address || !postalCode))) {
-      alert("⚠️ Please fill in all required fields!");
+      alert("\u26A0\uFE0F Please fill in all required fields!");
       return;
     }
 
     if (orderType === "Cash on Delivery") {
       const validPostal = colomboPostalCodes.includes(postalCode);
-      const validAddress = isAddressInColombo(address);
+      const validAddress = isAddressInColombo(address) || isKnownColomboArea(address);
       if (!validPostal || !validAddress) {
-        alert("❌ Cash on Delivery only available within Colombo district.");
+        alert("\u274C Cash on Delivery only available within Colombo district.");
         return;
       }
     }
@@ -108,11 +138,11 @@ function UpdatePlaceOrder() {
         },
       });
 
-      alert("🎉 Order updated successfully!");
+      alert("\uD83C\uDF89 Order updated successfully!");
       navigate("/order-status");
     } catch (error) {
-      console.error("❌ Error updating order:", error.response?.data || error.message);
-      alert("❌ Failed to update the order. Please try again.");
+      console.error("\u274C Error updating order:", error.response?.data || error.message);
+      alert("\u274C Failed to update the order. Please try again.");
     }
   };
 
