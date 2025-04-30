@@ -23,6 +23,8 @@ import ReservationList from "./pages/reservation/reservationList";
 import ReservationManagement from "./pages/reservation/ReservationBackground";
 import HomePage from "./pages/home/home"; 
 import Delivery from "./pages/Delivery/delivery";
+import UserReservations from "./pages/reservation/UserReservations";
+
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -66,6 +68,8 @@ function App() {
           <Route path="/reservation-management" element={<ReservationManagement />} />
           <Route path="/reservation-list" element={<ReservationList />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+
 
           {/* Admin Pages */}
           <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />

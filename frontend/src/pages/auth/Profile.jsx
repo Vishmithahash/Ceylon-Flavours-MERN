@@ -79,7 +79,30 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 p-6">
+      
+      {/* Navigation buttons OUTSIDE the form */}
+      <div className="flex gap-6 mb-8">
+        <button
+          onClick={() => navigate("/order-status")}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-semibold"
+        >
+          Orders
+        </button>
+        <button
+          onClick={() => navigate("/my-reservations")}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-semibold"
+        >
+          Reservations
+        </button>
+        <button
+          onClick={() => navigate("/delivery")}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-semibold"
+        >
+          Deliveries
+        </button>
+      </div>
+
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">My Profile</h2>
         {message && <p className="text-center text-green-600 mb-4">{message}</p>}

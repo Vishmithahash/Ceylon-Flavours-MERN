@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AdminHeader from "../../components/AdminHeader";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -8,6 +9,8 @@ const ReservationList = () => {
   const [editData, setEditData] = useState({});
   const [filter, setFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [reservationsOpen, setReservationsOpen] = useState(true); // Reservation Status
+
   const navigate = useNavigate();
 
   const fetchReservations = async () => {
@@ -19,9 +22,31 @@ const ReservationList = () => {
     }
   };
 
+  const fetchReservationStatus = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/config/reservation-status");
+      setReservationsOpen(res.data.reservationsOpen);
+    } catch (err) {
+      console.error("Error fetching reservation status:", err);
+    }
+  };
+
   useEffect(() => {
     fetchReservations();
+    fetchReservationStatus();
   }, []);
+
+  const toggleReservationStatus = async () => {
+    try {
+      const res = await axios.post("http://localhost:5000/api/config/toggle-reservation", {
+        reservationsOpen: !reservationsOpen,
+      });
+      setReservationsOpen(res.data.reservationsOpen);
+      alert(`Reservations are now ${res.data.reservationsOpen ? "OPEN" : "CLOSED"}`);
+    } catch (err) {
+      console.error("Error toggling reservation status:", err);
+    }
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this reservation?")) {
@@ -63,22 +88,23 @@ const ReservationList = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">Admins/Staff</h1>
-          <nav className="space-x-6">
-            <button onClick={() => navigate("/admin/dashboard")} className="text-gray-600 hover:text-blue-500 font-semibold">Dashboard</button>
-            <button onClick={() => navigate("/admin/orders")} className="text-gray-600 hover:text-blue-500 font-semibold">Orders</button>
-            <button onClick={() => navigate("/admin/deliveries")} className="text-gray-600 hover:text-blue-500 font-semibold">Deliveries</button>
-            <button onClick={() => navigate("/reservation-list")} className="text-gray-600 hover:text-blue-500 font-semibold">Reservations</button>
-            <button onClick={() => navigate("/admin/reviews")} className="text-gray-600 hover:text-blue-500 font-semibold">Reviews</button>
-            <button onClick={() => navigate("/admin/inventory")} className="text-gray-600 hover:text-blue-500 font-semibold">Inventory</button>
-          </nav>
-        </div>
-      </header>
+      <AdminHeader />
 
       <div className="p-6 text-black">
-        <h2 className="text-2xl font-semibold mb-4">Reservation List</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold">Reservation List</h2>
+
+          {/* Reservation Toggle Switch */}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Reservations :</span>
+            <button
+              onClick={toggleReservationStatus}
+              className={`px-4 py-2 rounded-md text-white ${reservationsOpen ? "bg-green-500" : "bg-red-500"}`}
+            >
+              {reservationsOpen ? "OPEN" : "CLOSED"}
+            </button>
+          </div>
+        </div>
 
         <div className="flex flex-col md:flex-row md:items-center mb-6 gap-4">
           <div>
@@ -163,7 +189,6 @@ const ReservationList = () => {
 
           </table>
         </div>
-
       </div>
     </div>
   );
