@@ -16,12 +16,28 @@ const ReservationManagement = () => {
         {/* Background Overlay */}
         <div className="absolute inset-0 bg-black opacity-50"></div>
 
+
+
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
+  <h1 className="text-4xl font-bold text-white mb-4">Ceylon Flavors - Let's Book a Table</h1>
+  <p className="text-xl text-white mb-8">
+    Manage and track all customer reservations for a smooth dining experience.
+  </p>
+
+  <Link to="/my-reservations">
+    <button className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full font-semibold shadow-md transition duration-300">
+      View Your Current Reservations
+    </button>
+  </Link>
+</div>
+
+
+
+
+
         {/* Text on the Faded Image */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
-          <h1 className="text-4xl font-bold text-white mb-4">Ceylon Flavors - Let's Book a Table</h1>
-          <p className="text-xl text-white mb-8">
-            Manage and track all customer reservations for a smooth dining experience.
-          </p>
         </div>
       </div>
 
@@ -44,13 +60,13 @@ const ReservationManagement = () => {
               <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
                 <h3 className="text-2xl font-semibold mb-4">Confirmation by Staff</h3>
                 <p>
-                  Staff members are notified of the reservation and confirm it in the system.
+                  Staff members are notified of the reservation and confirm via email notifications
                 </p>
               </div>
               <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
-                <h3 className="text-2xl font-semibold mb-4">Reservation Reminder</h3>
+                <h3 className="text-2xl font-semibold mb-4">Reservation Modification</h3>
                 <p>
-                  Customers receive reminder notifications before their reserved time.
+                  You can modify your own Reservations
                 </p>
               </div>
             </div>

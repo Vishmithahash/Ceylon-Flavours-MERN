@@ -103,3 +103,16 @@ export const deleteReservation = async (req, res) => {
         res.status(500).json({ message: "Failed to delete reservation", error: error.message });
     }
 };
+
+
+// Get reservations by user email
+export const getReservationByEmail = async (req, res) => {
+    try {
+      const email = req.params.email;
+      const reservations = await Reservation.find({ email });
+  
+      res.status(200).json(reservations);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user's reservations", error: error.message });
+    }
+  };
