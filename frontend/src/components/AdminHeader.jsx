@@ -24,7 +24,37 @@ const AdminHeader = () => {
               <Link to="/menutable" className="hover:text-yellow-300">
                 Menu
               </Link>
+              
             </li>
+
+            <li>
+              <Link to="/reservation-list" className="hover:text-yellow-300">
+                Reservations
+              </Link>
+              
+            </li>
+
+            <li>
+              <Link to="/admin-orders" className="hover:text-yellow-300">
+                Orders
+              </Link>
+            </li>
+
+            <li>
+              <Link to="" className="hover:text-yellow-300">
+                Deliveries
+              </Link>
+            </li>
+
+            <li>
+              <Link to="" className="hover:text-yellow-300">
+                Reviews
+              </Link>
+            </li>
+
+
+
+
             <li>
               <button
                 onClick={handleBackToSite}
