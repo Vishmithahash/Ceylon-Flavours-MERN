@@ -1,3 +1,5 @@
+// routes/orderRoute.js
+
 import express from "express";
 import {
   placeOrder,
@@ -5,19 +7,29 @@ import {
   getOrderById,
   updateOrder,
   deleteOrder,
-} from "../controller/orderController.js"; 
+  getMyOrders,
+} from "../controller/orderController.js";
+
+import { protect } from "../middlewares/authMiddleware.js"; // ✅ Import protect middleware
 
 const router = express.Router();
 
+// ✅ Customer places an order (must be logged in)
+router.post("/create", protect, placeOrder);
 
-router.post("/create", placeOrder);
-router.get("/", getAllOrders);
-router.get("/:id", getOrderById);
-router.patch("/:id", updateOrder);
-router.delete("/:id", deleteOrder);
+// ✅ Admin or Staff views all orders
+router.get("/", protect, getAllOrders);
+
+// ✅ Customer views only their own orders
+router.get("/my-orders", protect, getMyOrders);
+
+// ✅ Admin or Customer gets a single order by ID
+router.get("/:id", protect, getOrderById);
+
+// ✅ Admin updates an order
+router.patch("/:id", protect, updateOrder);
+
+// ✅ Admin deletes an order
+router.delete("/:id", protect, deleteOrder);
 
 export default router;
-
-
-
-
