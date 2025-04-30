@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AdminHeader from "../../components/AdminHeader";
+
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -88,7 +88,7 @@ const ReservationList = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <AdminHeader />
+      
 
       <div className="p-6 text-black">
         <div className="flex justify-between items-center mb-6">

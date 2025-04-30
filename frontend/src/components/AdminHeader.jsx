@@ -9,7 +9,7 @@ const AdminHeader = () => {
   };
 
   return (
-    <header className="bg-gray-800 text-white p-4 shadow-md">
+    <header className="bg-[#100f21] text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-bold tracking-wide">Admin Panel</h1>
 
@@ -28,14 +28,14 @@ const AdminHeader = () => {
             </li>
 
             <li>
-              <Link to="/reservation-list" className="hover:text-yellow-300">
+              <Link to="/admin/reservation-list" className="hover:text-yellow-300">
                 Reservations
               </Link>
               
             </li>
 
             <li>
-              <Link to="/admin-orders" className="hover:text-yellow-300">
+              <Link to="/admin/admin-orders" className="hover:text-yellow-300">
                 Orders
               </Link>
             </li>
@@ -47,7 +47,7 @@ const AdminHeader = () => {
             </li>
 
             <li>
-              <Link to="" className="hover:text-yellow-300">
+              <Link to="/admin/adminreviewpage" className="hover:text-yellow-300">
                 Reviews
               </Link>
             </li>
