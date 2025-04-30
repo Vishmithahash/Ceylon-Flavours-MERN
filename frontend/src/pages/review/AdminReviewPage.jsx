@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Star, Trash2, MessageCircle, XCircle } from "lucide-react";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable"; // Important: correct import!
+import autoTable from "jspdf-autotable"; // Correct import
 
 function AdminReviewPage() {
   const [reviews, setReviews] = useState([]);
@@ -54,8 +54,10 @@ function AdminReviewPage() {
       await axios.delete(`http://localhost:5000/api/reviews/${reviewId}`);
       setReviews(reviews.filter((review) => review._id !== reviewId));
       setFilteredReviews(filteredReviews.filter((review) => review._id !== reviewId));
+      alert("Review deleted successfully!"); // ✅ Popup after delete
     } catch (error) {
       console.error("Error deleting review:", error);
+      alert("Failed to delete review.");
     }
   };
 
@@ -66,19 +68,18 @@ function AdminReviewPage() {
       });
       setReplyModal({ open: false, review: null, replyText: "" });
       fetchReviews();
+      alert("Reply submitted successfully!"); // ✅ Popup after reply
     } catch (error) {
       console.error("Error submitting reply:", error);
+      alert("Failed to submit reply.");
     }
   };
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
-
-    // Title
     doc.setFontSize(18);
     doc.text("Ceylon Flavours - Review Report", 14, 22);
 
-    // Date
     const date = new Date();
     const formattedDate = date.toLocaleDateString();
     doc.setFontSize(11);
@@ -103,11 +104,10 @@ function AdminReviewPage() {
       body: tableRows,
       startY: 40,
       styles: { fontSize: 10 },
-      theme: 'striped',
-      headStyles: { fillColor: [22, 160, 133] }, // Teal header
+      theme: "striped",
+      headStyles: { fillColor: [22, 160, 133] },
     });
 
-    // Page Numbers
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);

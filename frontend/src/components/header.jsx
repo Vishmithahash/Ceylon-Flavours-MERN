@@ -38,7 +38,7 @@ function Header() {
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
                 { path: "/reservation", label: "Reservations" },
-                { path: "/reviewform", label: "Ratings" },
+                { path: "/reviewspage", label: "Ratings" },
                 { path: "/cart", label: "Cart" },
               ].map((item) => (
                 <li key={item.label} className="relative">
