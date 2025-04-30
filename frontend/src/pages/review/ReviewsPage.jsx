@@ -13,11 +13,19 @@ function ReviewsPage() {
   const [updatedReview, setUpdatedReview] = useState("");
   const [updatedRating, setUpdatedRating] = useState(0);
   const [updatedImage, setUpdatedImage] = useState(null);
+  const [userEmail, setUserEmail] = useState(""); // ✅ Logged-in user email
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchReviews();
+
+    // ✅ Get logged-in user's email
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const userObj = JSON.parse(storedUser);
+      setUserEmail(userObj.email);
+    }
   }, []);
 
   const fetchReviews = async () => {
@@ -109,6 +117,16 @@ function ReviewsPage() {
             onChange={handleSearch}
             className="p-2 border border-gray-300 rounded-lg w-full md:w-1/2"
           />
+        </div>
+
+        {/* Add Review Button */}
+        <div className="text-center mb-6">
+          <button
+            onClick={() => navigate("/reviewform")}
+            className="px-6 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
+          >
+            Add Review
+          </button>
         </div>
 
         {/* Category Filter */}
@@ -208,12 +226,15 @@ function ReviewsPage() {
                         </p>
                       </div>
                     )}
-                    <button
-                      onClick={() => handleEditClick(review)}
-                      className="w-full mt-3 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-                    >
-                      Edit Review
-                    </button>
+                    {/* ✅ Only show Edit button if logged-in user is the owner */}
+                    {review.email === userEmail && (
+                      <button
+                        onClick={() => handleEditClick(review)}
+                        className="w-full mt-3 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+                      >
+                        Edit Review
+                      </button>
+                    )}
                   </>
                 )}
               </div>
@@ -221,14 +242,6 @@ function ReviewsPage() {
           </div>
         )}
       </div>
-
-      {/* Admin Button */}
-      <button
-        onClick={() => navigate("/AdminReviewPage", { replace: true })}
-        className="fixed top-8 right-8 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300"
-      >
-        Admin
-      </button>
     </div>
   );
 }
