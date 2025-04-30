@@ -51,7 +51,11 @@ import orderRoutes from "./routes/orderRoute.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+
+import deliveryAssignmentRoutes from "./routes/deliveryAssignmentRoutes.js";
+
 import configRoutes from "./routes/configRoutes.js";  // (Add this import with others)
+
 
 
 // Route usage
@@ -64,6 +68,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/delivery-assignment", deliveryAssignmentRoutes);
 
 app.use("/api/config", configRoutes);  // (Add this use with others)
 
