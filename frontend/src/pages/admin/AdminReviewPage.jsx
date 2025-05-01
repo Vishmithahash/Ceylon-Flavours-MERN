@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Star, Trash2, MessageCircle, XCircle } from "lucide-react";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable"; // Correct import
+import autoTable from "jspdf-autotable";
 
 function AdminReviewPage() {
   const [reviews, setReviews] = useState([]);
@@ -54,7 +54,7 @@ function AdminReviewPage() {
       await axios.delete(`http://localhost:5000/api/reviews/${reviewId}`);
       setReviews(reviews.filter((review) => review._id !== reviewId));
       setFilteredReviews(filteredReviews.filter((review) => review._id !== reviewId));
-      alert("Review deleted successfully!"); // ✅ Popup after delete
+      alert("Review deleted successfully!");
     } catch (error) {
       console.error("Error deleting review:", error);
       alert("Failed to delete review.");
@@ -62,13 +62,39 @@ function AdminReviewPage() {
   };
 
   const handleReplySubmit = async () => {
+    const badWords = ["stupid", "idiot", "fool", "nonsense", "dumb", "trash", "loser", "moron", "bastard", "sucker", "crap", "shit", "fuck", "ass", "bitch", "damn", "retard", "piss", "dick", "cock", "slut", "whore", "cunt", "prick"];
+    const replyTextLower = replyModal.replyText.toLowerCase();
+    const found = badWords.find(word => replyTextLower.includes(word));
+    if (found) {
+      alert("Your reply contains inappropriate language.");
+      return;
+    }
+
+    try {
+      const aiRes = await axios.post(
+        `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=AIzaSyDDWGVW_1loLyHNEvW3bBeQIrMV_rGnBqQ`,
+        {
+          comment: { text: replyModal.replyText },
+          languages: ["en"],
+          requestedAttributes: { TOXICITY: {} }
+        }
+      );
+      const score = aiRes.data.attributeScores.TOXICITY.summaryScore.value;
+      if (score >= 0.7) {
+        alert("Your reply was detected as inappropriate by AI.");
+        return;
+      }
+    } catch (err) {
+      console.warn("AI check failed, continuing without it.");
+    }
+
     try {
       await axios.post(`http://localhost:5000/api/reviews/reply/${replyModal.review._id}`, {
         reply: replyModal.replyText,
       });
       setReplyModal({ open: false, review: null, replyText: "" });
       fetchReviews();
-      alert("Reply submitted successfully!"); // ✅ Popup after reply
+      alert("Reply submitted successfully!");
     } catch (error) {
       console.error("Error submitting reply:", error);
       alert("Failed to submit reply.");
@@ -123,7 +149,6 @@ function AdminReviewPage() {
       <div className="w-full mx-auto p-6 bg-purple-200 shadow-lg rounded-lg">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Admin Review Management</h1>
 
-        {/* Search Bar */}
         <div className="text-center mb-4">
           <input
             type="text"
@@ -134,7 +159,6 @@ function AdminReviewPage() {
           />
         </div>
 
-        {/* Category Filter */}
         <div className="text-center mb-4">
           {["1", "2", "3", "4", "5", "All"].map((category) => (
             <button
@@ -149,7 +173,6 @@ function AdminReviewPage() {
           ))}
         </div>
 
-        {/* PDF Export Button */}
         <div className="text-center mb-6">
           <button
             onClick={handleExportPDF}
@@ -159,7 +182,6 @@ function AdminReviewPage() {
           </button>
         </div>
 
-        {/* Reviews List */}
         {filteredReviews.length === 0 ? (
           <p className="text-gray-600 text-center">No reviews available.</p>
         ) : (
@@ -176,6 +198,7 @@ function AdminReviewPage() {
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{review.title}</h3>
                 <p className="text-gray-600 mb-2">{review.review}</p>
                 <p className="text-gray-500 text-sm">{review.email}</p>
+                <p className="text-gray-400 text-xs mt-1">Added on: {new Date(review.createdAt).toLocaleString()}</p>
                 <div className="flex mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -212,7 +235,6 @@ function AdminReviewPage() {
         )}
       </div>
 
-      {/* Reply Modal */}
       {replyModal.open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">

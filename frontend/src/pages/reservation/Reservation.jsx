@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Reservation = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -10,13 +13,27 @@ const Reservation = () => {
     time: "",
     people: "",
     specialRequest: "",
-    table_category: "Normal", // default
+    table_category: "Normal",
   });
 
-  const [reservationsOpen, setReservationsOpen] = useState(true); // NEW STATE
-  const [loading, setLoading] = useState(true); // Loading while checking
+  const [reservationsOpen, setReservationsOpen] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.email) {
+      alert("You must be logged in to make a reservation.");
+      navigate("/login");
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      name: user.name || "",
+      phone: user.phone || "",
+      email: user.email || ""
+    }));
+
     const fetchReservationStatus = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/config/reservation-status");
@@ -27,8 +44,9 @@ const Reservation = () => {
         setLoading(false);
       }
     };
+
     fetchReservationStatus();
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({ 
@@ -44,13 +62,28 @@ const Reservation = () => {
       return;
     }
 
+    // ✅ Validate number of people
+    const peopleCount = parseInt(formData.people);
+    if (isNaN(peopleCount) || peopleCount <= 0) {
+      alert("Please enter a valid number of people.");
+      return;
+    }
+
+    // ✅ Combine and validate date & time
+    const reservationDateTime = new Date(`${formData.date}T${formData.time}`);
+    const now = new Date();
+    if (reservationDateTime <= now) {
+      alert("Please select a future date and time.");
+      return;
+    }
+
     try {
       await axios.post("http://localhost:5000/api/reservations", formData);
       alert("Reservation created! Check your email for confirmation.");
       setFormData({
-        name: "",
-        phone: "",
-        email: "",
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
         date: "",
         time: "",
         people: "",
@@ -62,6 +95,9 @@ const Reservation = () => {
       alert("Failed to create reservation");
     }
   };
+
+  // ✅ Today's date in YYYY-MM-DD format
+  const todayDate = new Date().toISOString().split("T")[0];
 
   if (loading) {
     return <div className="text-center p-8">Checking reservation availability...</div>;
@@ -85,10 +121,10 @@ const Reservation = () => {
 
         <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
         <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <input type="date" name="date" value={formData.date} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
+        <input type="email" name="email" placeholder="Email Address" value={formData.email} readOnly className="w-full p-3 mb-4 border rounded-md bg-gray-100 cursor-not-allowed" />
+        <input type="date" name="date" value={formData.date} onChange={handleChange} required min={todayDate} className="w-full p-3 mb-4 border rounded-md" />
         <input type="time" name="time" value={formData.time} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <input type="number" name="people" placeholder="Number of People" value={formData.people} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
+        <input type="number" name="people" min="1" placeholder="Number of People" value={formData.people} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
         <select name="table_category" value={formData.table_category} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md">
           <option value="Normal">Normal Table</option>
           <option value="VIP">VIP Table</option>

@@ -32,6 +32,7 @@ export const placeOrder = async (req, res) => {
       subtotal,
       deliveryFee,
       total,
+      trackingStatus: "Order Placed" // ✅ initialize tracking status
     });
 
     await order.save();
@@ -46,7 +47,7 @@ export const placeOrder = async (req, res) => {
 // ✅ Get all orders (Admin)
 export const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("customerId", "name email");
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -78,32 +79,31 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-// ✅ Update existing order
+// ✅ Update existing order — safely handles partial updates (no data loss)
 export const updateOrder = async (req, res) => {
   try {
-    const {
-      name,
-      phone,
-      email,
-      address,
-      postalCode,
-      orderType,
-      deliveryFee,
-      total,
-    } = req.body;
+    const fieldsToUpdate = {};
+
+    [
+      "name",
+      "phone",
+      "email",
+      "address",
+      "postalCode",
+      "orderType",
+      "deliveryFee",
+      "total",
+      "status",
+      "trackingStatus" // ✅ include this
+    ].forEach((key) => {
+      if (req.body[key] !== undefined) {
+        fieldsToUpdate[key] = req.body[key];
+      }
+    });
 
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
-      {
-        name,
-        phone,
-        email,
-        address: address || "",
-        postalCode: postalCode || "",
-        orderType,
-        deliveryFee,
-        total,
-      },
+      fieldsToUpdate,
       { new: true, runValidators: true }
     );
 

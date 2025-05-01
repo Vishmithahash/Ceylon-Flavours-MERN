@@ -26,30 +26,9 @@ function OrderStatus() {
   };
 
   useEffect(() => {
-    const fetchMyOrders = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.warn("Token missing");
-          return;
-        }
-  
-        const response = await axios.get("http://localhost:5000/api/orders/my-orders", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-  
-        console.log("Fetched orders:", response.data); // 👈 Add this
-        setOrders(response.data);
-      } catch (error) {
-        console.error("❌ Error fetching orders:", error.response?.data || error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
     fetchMyOrders();
   }, []);
-  
+
   const handleCancelOrder = async (id) => {
     if (window.confirm("Are you sure you want to cancel this order?")) {
       try {
@@ -72,12 +51,16 @@ function OrderStatus() {
     navigate(`/update-order/${order._id}`, { state: { order: updatedOrderWithPostal } });
   };
 
+  const handleTrackOrder = (order) => {
+    navigate("/track-order-customer", { state: { order } });
+  };
+
   const filteredOrders = orders.filter((order) => {
     const name = order.name || "";
     const phone = order.phone || "";
     const email = order.email || "";
     const status = order.status || "";
-  
+
     return (
       (filter === "All" || status === filter) &&
       (
@@ -87,7 +70,6 @@ function OrderStatus() {
       )
     );
   });
-  
 
   return (
     <div className="container mx-auto p-8">
@@ -164,7 +146,7 @@ function OrderStatus() {
                   </span>
                 </div>
 
-                <div className="flex gap-4 mt-6">
+                <div className="flex flex-wrap gap-4 mt-6">
                   {order.status === "Pending" && (
                     <button
                       onClick={() => handleEditOrder(order)}
@@ -178,6 +160,12 @@ function OrderStatus() {
                     className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition font-semibold"
                   >
                     Cancel Order
+                  </button>
+                  <button
+                    onClick={() => handleTrackOrder(order)}
+                    className="bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 transition font-semibold"
+                  >
+                    Track Order
                   </button>
                 </div>
               </div>

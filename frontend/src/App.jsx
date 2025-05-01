@@ -22,6 +22,8 @@ import Reservation from "./pages/reservation/Reservation";
 import ReservationList from "./pages/admin/reservationList";
 import ReservationManagement from "./pages/reservation/ReservationBackground";
 import HomePage from "./pages/home/home"; 
+import TrackAdminOrderStatus from "./pages/OrderStatus/trackAdminOrderStatus";
+import TrackCusOrderStatus from "./pages/OrderStatus/trackCusOrderStatus";
 import UserReservations from "./pages/reservation/UserReservations";
 
 
@@ -33,9 +35,13 @@ import Profile from "./pages/auth/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./layouts/AdminLayout";
+
+
+
 import Deliveries from "./pages/admin/Deliveries";
 import ManageDeliveryPersonnel from "./pages/admin/ManageDeliveryPersonnel";
 import AddDeliveryPersonnel from "./pages/admin/AssignDelivery";
+
 
 function App() {
   const location = useLocation();
@@ -69,7 +75,8 @@ function App() {
           <Route path="/reviewspage" element={<ReviewsPage />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/reservation-management" element={<ReservationManagement />} />
-        
+          <Route path="/track-order-admin" element={<TrackAdminOrderStatus />} />
+          <Route path="/track-order-customer" element={<TrackCusOrderStatus />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
 
@@ -85,8 +92,14 @@ function App() {
           <Route path="/admin/delivery" element={<ProtectedRoute><AdminLayout><Deliveries /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/manage-delivery-personnel" element={<ProtectedRoute><AdminLayout><ManageDeliveryPersonnel /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/add-delivery-personnel" element={<ProtectedRoute><AdminLayout><AddDeliveryPersonnel /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/track-order" element={<TrackAdminOrderStatus />} />
+
+
+
+
 
           {/* 404 Page */}
+
 
         </Routes>
         {!isAuthPage && <Footer />}
