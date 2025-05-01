@@ -62,6 +62,13 @@ const Reservation = () => {
       return;
     }
 
+    // ✅ Validate phone number (Sri Lankan format: 10 digits, starts with 0)
+const phoneRegex = /^0\d{9}$/;
+if (!phoneRegex.test(formData.phone)) {
+  alert("Please enter a valid Sri Lankan phone number (e.g., 0771234567).");
+  return;
+}
+
     // ✅ Validate number of people
     const peopleCount = parseInt(formData.people);
     if (isNaN(peopleCount) || peopleCount <= 0) {
