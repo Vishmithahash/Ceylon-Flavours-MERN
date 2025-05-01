@@ -62,12 +62,20 @@ const Reservation = () => {
       return;
     }
 
+    // ✅ Validate phone number (Sri Lankan format: 10 digits, starts with 0)
+const phoneRegex = /^0\d{9}$/;
+if (!phoneRegex.test(formData.phone)) {
+  alert("Please enter a valid Sri Lankan phone number (e.g., 0771234567).");
+  return;
+}
+
     // ✅ Validate number of people
     const peopleCount = parseInt(formData.people);
-    if (isNaN(peopleCount) || peopleCount <= 0) {
-      alert("Please enter a valid number of people.");
-      return;
-    }
+if (isNaN(peopleCount) || peopleCount <= 0 || peopleCount > 10) {
+  alert("Maximum number of people can be 10 per Reservation.");
+  return;
+}
+
 
     // ✅ Combine and validate date & time
     const reservationDateTime = new Date(`${formData.date}T${formData.time}`);
@@ -76,6 +84,11 @@ const Reservation = () => {
       alert("Please select a future date and time.");
       return;
     }
+
+
+
+
+
 
     try {
       await axios.post("http://localhost:5000/api/reservations", formData);
