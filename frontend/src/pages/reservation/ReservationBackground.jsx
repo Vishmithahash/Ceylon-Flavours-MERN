@@ -25,11 +25,6 @@ const ReservationManagement = () => {
     Manage and track all customer reservations for a smooth dining experience.
   </p>
 
-  <Link to="/my-reservations">
-    <button className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full font-semibold shadow-md transition duration-300">
-      View Your Current Reservations
-    </button>
-  </Link>
 </div>
 
 
