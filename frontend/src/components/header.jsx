@@ -38,7 +38,6 @@ function Header() {
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
 
-                { path: "/reservation-management", label: "Reservations" },
                 { path: "/reviewspage", label: "Ratings" },
 
                 
