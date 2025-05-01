@@ -38,11 +38,15 @@ function Header() {
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
 
-                
+              
                 { path: "/reviewspage", label: "Ratings" },
 
                 
                 
+
+                { path: "/reviewspage", label: "Ratings" },
+
+
 
                 { path: "/cart", label: "Cart" },
 
