@@ -196,7 +196,17 @@ function UpdatePlaceOrder() {
           <input type="text" name="phone" value={updatedOrder.phone} readOnly className="w-full p-3 mb-3 border rounded-lg text-lg bg-gray-100 cursor-not-allowed" />
           <input type="email" name="email" value={updatedOrder.email} readOnly className="w-full p-3 mb-3 border rounded-lg text-lg bg-gray-100 cursor-not-allowed" />
 
-          <textarea name="address" placeholder="Address" value={updatedOrder.address} onChange={handleChange} className="w-full p-3 mb-3 border rounded-lg text-lg h-28 resize-none" />
+          <textarea
+              name="address"
+              placeholder="Address"
+              value={updatedOrder.address}
+              onChange={handleChange}
+              disabled={updatedOrder.orderType === "Pick up"}
+              className={`w-full p-3 mb-3 border rounded-lg text-lg h-28 resize-none ${
+              updatedOrder.orderType === "Pick up" ? "bg-gray-100 cursor-not-allowed" : ""
+             }`}
+          />
+
 
           {updatedOrder.orderType === "Cash on Delivery" && (
             <div className="flex justify-end my-2">

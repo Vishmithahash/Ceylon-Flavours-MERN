@@ -24,7 +24,7 @@ const allColomboAreas = [
   "mulleriyawa", "udahamulla", "kohuwala", "pagoda", "polhengoda",
   "kalubowila", "sri jayawardenepura", "hendala", "udahamulla north",
   "udahamulla south", "wijerama", "madiwela west", "rathmaldeniya",
-  "mirihana", "kawdana", "nadimala", "pepiliyana", "wattegedara",
+  "mirihana", "kawdana", "nadimala", "pepiliyana", "wattegedara", "kaduwela",
 
   // Rural Areas
   "homagama", "meegoda", "padukka", "hanwella", "avissawella", "godagama",
