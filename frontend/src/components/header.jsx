@@ -37,7 +37,13 @@ function Header() {
               {[
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
+
+
+              
                 { path: "/reviewspage", label: "Ratings" },
+
+
+
                 { path: "/cart", label: "Cart" },
               ].map((item) => (
                 <li key={item.label} className="relative">
