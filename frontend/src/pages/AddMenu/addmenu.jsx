@@ -242,11 +242,24 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
 
   const handleAddToCart = () => {
     if (!user) {
-      alert("\ud83d\udeab Please login to add items to your cart!");
+      alert("🚫 Please login to add items to your cart!");
       return;
     }
-    addToCart(item);
+  
+    if (!item.availability) {
+      alert("❌ This item is currently unavailable.");
+      return;
+    }
+  
+    const itemToAdd = {
+      ...item,
+      price: parseFloat(discountedPrice),
+    };
+  
+    addToCart(itemToAdd);
+    alert("✅ Item added to cart!");
   };
+  
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow text-center">
@@ -280,5 +293,6 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
     </div>
   );
 }
+
 
 export default AddMenu;

@@ -24,8 +24,6 @@ import ReservationManagement from "./pages/reservation/ReservationBackground";
 import HomePage from "./pages/home/home"; 
 import TrackAdminOrderStatus from "./pages/OrderStatus/trackAdminOrderStatus";
 import TrackCusOrderStatus from "./pages/OrderStatus/trackCusOrderStatus";
-
-
 import UserReservations from "./pages/reservation/UserReservations";
 
 
@@ -37,6 +35,8 @@ import Profile from "./pages/auth/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./layouts/AdminLayout";
+import EnrollDeliveryPerson from "./pages/auth/EnrollDeliveryPerson";
+import DeliveryPersonPage from "./pages/auth/deliveryperson";
 
 
 
@@ -48,7 +48,7 @@ import AddDeliveryPersonnel from "./pages/admin/AssignDelivery";
 function App() {
   const location = useLocation();
 
-  const authPaths = ["/login", "/register", "/forgot-password", "/reset-password"];
+  const authPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/enrolldelivery", "/delivery-person"];
 
   const isAuthPage = authPaths.some((path) => location.pathname.startsWith(path));
   
@@ -65,6 +65,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+          <Route path="/enrolldelivery" element={<EnrollDeliveryPerson />} />
+          <Route path="/delivery-person" element={<DeliveryPersonPage />} />
 
           {/* User Pages */}
           <Route path="/" element={<HomePage />} /> 
@@ -81,6 +83,8 @@ function App() {
           <Route path="/track-order-customer" element={<TrackCusOrderStatus />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+          
+
 
 
           {/* Admin Pages with AdminLayout */}
