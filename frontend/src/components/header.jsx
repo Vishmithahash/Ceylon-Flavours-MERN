@@ -40,8 +40,6 @@ function Header() {
 
                 { path: "/reviewspage", label: "Ratings" },
 
-                
-                { path: "/reviewform", label: "Ratings" },
 
                 { path: "/cart", label: "Cart" },
 
