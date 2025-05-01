@@ -1,5 +1,3 @@
-// login.jsx
-
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -40,11 +38,11 @@ const Login = () => {
         if (res.data.success) {
           const loggedInUser = res.data.user;
           localStorage.setItem("token", res.data.token);
-          localStorage.setItem("user", JSON.stringify(loggedInUser)); // ✅ Save user
+          localStorage.setItem("user", JSON.stringify(loggedInUser));
           setUser(loggedInUser);
 
           alert("Login Successful!");
-          window.location.replace("/");  // ✅ Replace page - no back to login
+          window.location.replace("/");
         }
       }
     } catch (error) {
@@ -134,6 +132,16 @@ const Login = () => {
               Register
             </button>
           </p>
+        </div>
+
+        <div className="text-center mt-6 border-t pt-4">
+          <p className="text-gray-600">Are you a delivery person?</p>
+          <button
+            onClick={() => navigate("/enrolldelivery")}
+            className="mt-2 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition"
+          >
+            Enroll as Delivery Person
+          </button>
         </div>
       </div>
     </div>
