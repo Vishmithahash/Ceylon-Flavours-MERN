@@ -26,6 +26,20 @@ const orderSchema = new mongoose.Schema(
     deliveryFee: { type: Number, required: true },
     total: { type: Number, required: true },
     status: { type: String, default: "Pending" },
+
+    trackingStatus: {
+      type: String,
+      enum: [
+        "Order Placed",
+        "Order Confirmed",
+        "Order is Being Prepared",
+        "Order Preparation Completed",
+        "Order Handover to Delivery",
+        "Ready to Pick Up" 
+      ],
+      default: "Order Placed"
+    },
+    
   },
   { timestamps: true }
 );

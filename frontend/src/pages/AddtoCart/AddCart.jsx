@@ -21,15 +21,7 @@ function AddCart() {
   return (
     <div className="relative w-full min-h-screen px-4 pt-6 bg-gray-100">
 
-      {/* My Orders Button — Top Right */}
-      <div className="absolute top-6 right-6 z-10">
-        <button
-          onClick={() => navigate("/order-status")}
-          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-5 py-2 rounded-full shadow-md transition"
-        >
-          My Orders
-        </button>
-      </div>
+     
 
       {/* Cart Box */}
       <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden p-10 mt-20">
