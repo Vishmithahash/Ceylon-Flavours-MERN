@@ -38,6 +38,7 @@ function Header() {
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
 
+
               
                 { path: "/reviewspage", label: "Ratings" },
 
@@ -48,8 +49,10 @@ function Header() {
 
 
 
-                { path: "/cart", label: "Cart" },
 
+                { path: "/reviewspage", label: "Ratings" },
+
+                { path: "/cart", label: "Cart" },
               ].map((item) => (
                 <li key={item.label} className="relative">
                   <Link
@@ -66,42 +69,22 @@ function Header() {
                 </li>
               ))}
 
-
-
               {/* ✅ Reservations link with login check */}
-    <li className="relative">
-      <button
-        onClick={() => {
-          if (user) {
-            navigate("/reservation-management");
-          } else {
-            alert("Please login or register to continue.");
-            navigate("/login");
-          }
-        }}
-        className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
-      >
-        Reservations
-      </button>
-    </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              <li className="relative">
+                <button
+                  onClick={() => {
+                    if (user) {
+                      navigate("/reservation-management");
+                    } else {
+                      alert("Please login or register to continue.");
+                      navigate("/login");
+                    }
+                  }}
+                  className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+                >
+                  Reservations
+                </button>
+              </li>
             </ul>
           </nav>
 
@@ -110,7 +93,9 @@ function Header() {
             <div
               className="flex flex-col items-center cursor-pointer"
               onClick={() => {
-                if (user) {
+                if (user?.role === "admin") {
+                  alert("🚫 Admin profile view is not available.");
+                } else if (user) {
                   navigate("/profile");
                 } else {
                   alert("You need to register first to access the profile.");
@@ -143,7 +128,6 @@ function Header() {
               </Link>
             )}
           </div>
-
         </div>
       </header>
     </div>
