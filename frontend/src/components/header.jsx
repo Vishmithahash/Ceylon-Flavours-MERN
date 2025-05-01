@@ -38,11 +38,11 @@ function Header() {
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
 
-                { path: "/reservation-management", label: "Reservations" },
+                
                 { path: "/reviewspage", label: "Ratings" },
 
                 
-                { path: "/reviewform", label: "Ratings" },
+                
 
                 { path: "/cart", label: "Cart" },
 
