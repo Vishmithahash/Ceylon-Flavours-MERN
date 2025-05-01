@@ -242,10 +242,16 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
 
   const handleAddToCart = () => {
     if (!user) {
-      alert("\ud83d\udeab Please login to add items to your cart!");
+      alert("🚫 Please login to add items to your cart!");
       return;
     }
-    addToCart(item);
+
+    const itemToAdd = {
+      ...item,
+      price: parseFloat(discountedPrice),
+    };
+
+    addToCart(itemToAdd);
   };
 
   return (
@@ -280,5 +286,6 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
     </div>
   );
 }
+
 
 export default AddMenu;
