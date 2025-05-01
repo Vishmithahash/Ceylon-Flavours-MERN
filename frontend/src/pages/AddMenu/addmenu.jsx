@@ -245,14 +245,21 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
       alert("🚫 Please login to add items to your cart!");
       return;
     }
-
+  
+    if (!item.availability) {
+      alert("❌ This item is currently unavailable.");
+      return;
+    }
+  
     const itemToAdd = {
       ...item,
       price: parseFloat(discountedPrice),
     };
-
+  
     addToCart(itemToAdd);
+    alert("✅ Item added to cart!");
   };
+  
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow text-center">
