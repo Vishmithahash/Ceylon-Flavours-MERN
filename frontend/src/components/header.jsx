@@ -37,8 +37,10 @@ function Header() {
               {[
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
-                
-                { path: "/reviewform", label: "Ratings" },
+
+                { path: "/reviewspage", label: "Ratings" },
+
+
                 { path: "/cart", label: "Cart" },
 
               ].map((item) => (
