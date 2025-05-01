@@ -16,16 +16,45 @@ const sendConfirmationEmail = async (customerEmail, reservationDetails) => {
         to: customerEmail,
         subject: 'Your Reservation is Confirmed!',
         html: `
-            <h2>Reservation Confirmation</h2>
-            <p>Hi <strong>${reservationDetails.name}</strong>,</p>
-            <p>Your reservation is confirmed:</p>
-            <ul>
-                <li><strong>Date:</strong> ${reservationDetails.date}</li>
-                <li><strong>Time:</strong> ${reservationDetails.time}</li>
-                <li><strong>People:</strong> ${reservationDetails.people}</li>
-                <li><strong>Special Request:</strong> ${reservationDetails.specialRequest || "None"}</li>
-            </ul>
-            <p>Thank you for choosing us!</p>
+            <div style="max-width:600px;margin:0 auto;padding:30px;background-color:#ffffff;border-radius:8px;font-family:'Segoe UI', Tahoma, sans-serif;color:#333;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+  <div style="text-align:center;margin-bottom:20px;">
+    <h2 style="color:#100f21;">🍽️ Reservation Confirmation</h2>
+    <p style="font-size:16px;">Thank you for choosing <strong>Ceylon Flavors</strong></p>
+  </div>
+
+  <p style="font-size:16px;">Hi <strong>${reservationDetails.name}</strong>,</p>
+
+  <p style="font-size:15px;">We're happy to confirm your reservation. Here are the details:</p>
+
+  <table style="width:100%;font-size:15px;margin:20px 0;">
+    <tr>
+      <td style="padding:8px 0;"><strong>Date:</strong></td>
+      <td>${reservationDetails.date}</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 0;"><strong>Time:</strong></td>
+      <td>${reservationDetails.time}</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 0;"><strong>People:</strong></td>
+      <td>${reservationDetails.people}</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 0;"><strong>Special Request:</strong></td>
+      <td>${reservationDetails.specialRequest || "None"}</td>
+    </tr>
+  </table>
+
+  <p style="font-size:15px;">If you have any questions or changes, feel free to contact us.</p>
+
+  <p style="margin-top:30px;font-size:14px;color:#555;">With warm regards, <br/> <strong>Ceylon Flavors Team</strong></p>
+
+  <div style="margin-top:20px;text-align:center;font-size:13px;color:#999;">
+    <p>📍 123 Colombo Street, Sri Lanka<br/>
+    ☎️ +94 77 123 4567 | ✉️ info@ceylonflavors.com</p>
+  </div>
+</div>
+
         `
     };
 

@@ -6,6 +6,44 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+const allColomboAreas = [
+  // Urban Areas
+  "colombo", "pettah", "fort", "bambalapitiya", "kollupitiya", "maradana",
+  "wellawatte", "dematagoda", "borella", "havelock town", "slave island",
+  "thimbirigasyaya", "kirulapone", "mutwal", "grandpass", "orugodawatta",
+  "wellampitiya", "meethotamulla", "panchikawatta", "maligawatta",
+  "bloemendhal", "hultsdorf", "wolvendhal",
+
+  // Suburban Areas
+  "nawala", "nugegoda", "rajagiriya", "pita kotte", "ethul kotte",
+  "pelawatte", "battaramulla", "koswatta", "talawatugoda", "malabe",
+  "kottawa", "maharagama", "pannipitiya", "dehiwala", "mt lavinia",
+  "ratmalana", "boralesgamuwa", "bellanwila", "madiwela", "hokandara",
+  "moratuwa", "angulana", "piliyandala", "kesbewa", "kotikawatta",
+  "kolonnawa", "angoda", "kiribathgoda", "nabimana", "delkanda", "thalahena",
+  "mulleriyawa", "udahamulla", "kohuwala", "pagoda", "polhengoda",
+  "kalubowila", "sri jayawardenepura", "hendala", "udahamulla north",
+  "udahamulla south", "wijerama", "madiwela west", "rathmaldeniya",
+  "mirihana", "kawdana", "nadimala", "pepiliyana", "wattegedara", "kaduwela",
+
+  // Rural Areas
+  "homagama", "meegoda", "padukka", "hanwella", "avissawella", "godagama",
+  "pitipana", "watareka", "pallebedda", "raththanapitiya", "weligama junction",
+  "athurugiriya", "habarakada", "polgasowita", "madapatha", "katuwawala",
+  "rukmalgama", "talahena east", "idama", "makumbura", "mattegoda", "galawila",
+  "werahera", "bokundara", "kiriwaththuduwa", "gonapola", "kandana (partial)",
+  "siyambalape", "henpita", "pitumpe", "dolekade", "millaniya (partial)"
+];
+
+const isKnownColomboArea = (address) => {
+  const lowerAddress = address.toLowerCase();
+  return allColomboAreas.some((area) => lowerAddress.includes(area));
+};
+
+const isAddressInColombo = (address) => {
+  return address.toLowerCase().includes("colombo district");
+};
+
 function PlaceOrder() {
   const { cartItems, clearCart } = useCart();
   const navigate = useNavigate();
@@ -50,39 +88,26 @@ function PlaceOrder() {
   };
 
   const colomboPostalCodes = [
-    // Colombo City (Colombo 01–15)
-    "00100", "00200", "00300", "00400", "00500",
-    "00600", "00700", "00800", "00900", "01000",
-    "01100", "01200", "01300", "01400", "01500",
-  
-    // Suburban Areas
-    "10100", "10107", "10115", "10116", "10118",
-    "10120", "10150", "10200", "10202", "10204",
-    "10206", "10208", "10230", "10232", "10250",
-    "10280", "10290", "10300", "10302", "10304",
-    "10306", "10320", "10350", "10370", "10390",
-    "10400", "10500", "10502", "10504", "10508",
-    "10511", "10513", "10522", "10524", "10526",
-    "10600", "10620", "10640", "10650", "10654",
-    "10656", "10680", "10682", "10700", "10704",
+    "00100", "00200", "00300", "00400", "00500", "00600", "00700", "00800", "00900", "01000",
+    "01100", "01200", "01300", "01400", "01500", "10100", "10107", "10115", "10116", "10118",
+    "10120", "10150", "10200", "10202", "10204", "10206", "10208", "10230", "10232", "10250",
+    "10280", "10290", "10300", "10302", "10304", "10306", "10320", "10350", "10370", "10390",
+    "10400", "10500", "10502", "10504", "10508", "10511", "10513", "10522", "10524", "10526",
+    "10600", "10620", "10640", "10650", "10654", "10656", "10680", "10682", "10700", "10704",
     "10712", "10714", "10718", "10730"
   ];
 
-  const isAddressInColombo = (address) => {
-    return address.toLowerCase().includes("colombo district");
-  };
-
   const handleOrder = async () => {
     if (!customer.name || !customer.phone || !customer.email || (customer.orderType === "Cash on Delivery" && (!customer.address || !customer.postalCode))) {
-      alert("⚠️ Please fill all required fields");
+      alert("\u26A0\uFE0F Please fill all required fields");
       return;
     }
 
     if (customer.orderType === "Cash on Delivery") {
       const validPostal = colomboPostalCodes.includes(customer.postalCode);
-      const validAddress = isAddressInColombo(customer.address);
+      const validAddress = isAddressInColombo(customer.address) || isKnownColomboArea(customer.address);
       if (!validPostal || !validAddress) {
-        alert("❌ Delivery only in Colombo district.");
+        alert("\u274C Delivery only in Colombo district.");
         return;
       }
     }
@@ -114,13 +139,13 @@ function PlaceOrder() {
       );
 
       if (res.status === 201) {
-        alert("🎉 Order placed!");
+        alert("\uD83C\uDF89 Order placed!");
         clearCart();
         navigate("/order-status");
       }
     } catch (err) {
-      console.error("❌ Failed to place order:", err.response?.data || err);
-      alert("❌ Failed to place order");
+      console.error("\u274C Failed to place order:", err.response?.data || err);
+      alert("\u274C Failed to place order");
     } finally {
       setIsLoading(false);
     }

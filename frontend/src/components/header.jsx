@@ -37,9 +37,15 @@ function Header() {
               {[
                 { path: "/", label: "Home" },
                 { path: "/addmenu", label: "Menu" },
+
                 { path: "/reservation-management", label: "Reservations" },
                 { path: "/reviewspage", label: "Ratings" },
+
+                
+                { path: "/reviewform", label: "Ratings" },
+
                 { path: "/cart", label: "Cart" },
+
               ].map((item) => (
                 <li key={item.label} className="relative">
                   <Link
@@ -55,6 +61,43 @@ function Header() {
                   )}
                 </li>
               ))}
+
+
+
+              {/* ✅ Reservations link with login check */}
+    <li className="relative">
+      <button
+        onClick={() => {
+          if (user) {
+            navigate("/reservation-management");
+          } else {
+            alert("Please login or register to continue.");
+            navigate("/login");
+          }
+        }}
+        className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+      >
+        Reservations
+      </button>
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </ul>
           </nav>
 

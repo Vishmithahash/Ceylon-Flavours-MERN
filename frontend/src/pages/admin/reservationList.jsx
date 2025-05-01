@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [filter, setFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [reservationsOpen, setReservationsOpen] = useState(true); // Reservation Status
+  const [selectedDate, setSelectedDate] = useState("");
+  const [reservationsOpen, setReservationsOpen] = useState(true);
 
   const navigate = useNavigate();
 
@@ -83,18 +83,16 @@ const ReservationList = () => {
   const filteredReservations = reservations.filter((res) => {
     const matchesSearch = res.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filter === "All" || res.table_category === filter;
-    return matchesSearch && matchesCategory;
+    const matchesDate = !selectedDate || res.date === selectedDate;
+    return matchesSearch && matchesCategory && matchesDate;
   });
 
   return (
     <div className="min-h-screen bg-gray-100">
-      
-
       <div className="p-6 text-black">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Reservation List</h2>
 
-          {/* Reservation Toggle Switch */}
           <div className="flex items-center gap-2">
             <span className="font-semibold">Reservations :</span>
             <button
@@ -126,6 +124,16 @@ const ReservationList = () => {
               className="p-2 border rounded w-64"
             />
           </div>
+
+          <div>
+            <label className="mr-2">Filter by Date:</label>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="p-2 border rounded"
+            />
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -143,7 +151,6 @@ const ReservationList = () => {
                 <th className="border p-2">Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {filteredReservations.map((res) => (
                 <tr key={res._id} className="hover:bg-gray-100">
@@ -186,7 +193,6 @@ const ReservationList = () => {
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
       </div>

@@ -1,189 +1,211 @@
-// pages/AdminOrder/adminOrder.jsx
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import AdminHeader from "../../components/AdminHeader";
+import { useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 function AdminOrder() {
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("All");
+  const navigate = useNavigate();
+  const printRef = useRef();
 
-  // Fetch Orders from Backend
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error("No token found");
-          return;
-        }
-
-        const response = await axios.get("http://localhost:5000/api/orders", {
-          headers: { Authorization: `Bearer ${token}` }, // ✅ Send token
-        });
-        setOrders(response.data);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
-
     fetchOrders();
   }, []);
 
-  // Confirm Order Function
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return console.error("No token found");
+      const response = await axios.get("http://localhost:5000/api/orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
   const handleConfirmOrder = async (orderId) => {
     try {
-
       const token = localStorage.getItem("token");
       await axios.patch(
         `http://localhost:5000/api/orders/${orderId}`,
-        { status: "Confirmed" },
         {
-          headers: { Authorization: `Bearer ${token}` }, // ✅ Send token
-        }
+          status: "Confirmed",
+          trackingStatus: "Order Confirmed",
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      await axios.patch(`http://localhost:5000/api/orders/${orderId}`, {
-        status: "Confirmed",
-      });
-
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: "Confirmed" } : order
-        )
-      );
+      fetchOrders();
     } catch (error) {
       console.error("Error confirming order:", error);
     }
   };
 
-  // Cancel Order Function
   const handleCancelOrder = async (orderId) => {
     try {
-
       const token = localStorage.getItem("token");
       await axios.delete(`http://localhost:5000/api/orders/${orderId}`, {
-        headers: { Authorization: `Bearer ${token}` }, // ✅ Send token
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
-
-      await axios.delete(`http://localhost:5000/api/orders/${orderId}`);
-      setOrders((prevOrders) =>
-        prevOrders.filter((order) => order._id !== orderId)
-      );
-
+      fetchOrders();
     } catch (error) {
       console.error("Error canceling order:", error);
     }
   };
 
-  // Filter and Search function with safe checks
-  const filteredOrders = orders
-    .filter((order) => order.customer) // only include orders with customer data
-    .filter((order) => {
-      const customer = order.customer;
-      return (
-        (filter === "All" || order.status === filter) &&
-        (customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          customer.phone?.includes(searchTerm) ||
-          customer.email?.toLowerCase().includes(searchTerm))
-      );
+  const handleTrackOrder = (order) => {
+    navigate("/track-order-admin", { state: { order } });
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    const name = order.name || "";
+    const phone = order.phone || "";
+    const email = order.email || "";
+    const status = order.status || "";
+    return (
+      (filter === "All" || status === filter) &&
+      (name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        phone.includes(searchTerm) ||
+        email.toLowerCase().includes(searchTerm))
+    );
+  });
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Ceylon Flavors - Order Summary", 14, 15);
+
+    const tableRows = filteredOrders.map((order, index) => [
+      index + 1,
+      order.name,
+      order.email,
+      order.phone,
+      `Rs.${order.total}.00`,
+      order.status,
+    ]);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [["#", "Name", "Email", "Phone", "Total (Rs)", "Status"]],
+      body: tableRows,
     });
 
-  return (
-    <div className="container mx-auto p-8">
-      <div className="flex flex-col items-center mb-6">
-        <h1 className="text-4xl font-bold mb-4">Orders</h1>
+    doc.save("Admin_Order_Report.pdf");
+  };
 
-        {/* Search & Filter */}
-        <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="Search orders..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="p-2 border border-gray-400 rounded-lg"
-          />
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="p-2 border border-gray-400 rounded-lg"
-          >
-            <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-          </select>
-        </div>
+  const printReport = () => {
+    const content = printRef.current.innerHTML;
+    const printWindow = window.open("", "", "width=800,height=900");
+    printWindow.document.write("<html><head><title>Print Orders</title></head><body>");
+    printWindow.document.write(content);
+    printWindow.document.write("</body></html>");
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  return (
+    <div className="container mx-auto px-6 py-10">
+      <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-8">📦 Orders</h1>
+
+      <div className="flex justify-center gap-3 mb-6">
+        <button
+          onClick={downloadPDF}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded shadow"
+        >
+          📥 Download PDF
+        </button>
+        <button
+          onClick={printReport}
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded shadow"
+        >
+          🖨️ Print
+        </button>
       </div>
 
-      {/* Orders Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300 text-lg">
-          <thead>
-            <tr className="bg-gray-200 text-xl">
-              <th className="p-4 border">Food Details</th>
-              <th className="p-4 border">Name</th>
-              <th className="p-4 border">Phone Number</th>
-              <th className="p-4 border">Email</th>
-              <th className="p-4 border">Address</th>
-              <th className="p-4 border">Order Type</th>
-              <th className="p-4 border">Total Payment</th>
-              <th className="p-4 border w-56">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((order) => (
-              <tr key={order._id} className="border text-lg">
-                {/* Food Details */}
-                <td className="p-4 border">
-                  {order.items.map((item, index) => (
-                    <div key={index} className="flex items-center gap-4 mb-3">
-                      <img
-                        src={`http://localhost:5000/uploads/${item.image}`}
-                        alt={item.name}
-                        className="w-20 h-20 rounded-lg border"
-                      />
-                      <div>
-                        <p className="font-bold text-lg">{item.name}</p>
-                        <p className="text-sm">Quantity: {item.quantity}</p>
-                        <p className="text-sm">Rs.{item.price * item.quantity}.00</p>
-                      </div>
-                    </div>
-                  ))}
-                </td>
+      <div className="flex flex-wrap justify-center gap-4 mb-6">
+        <input
+          type="text"
+          placeholder="Search orders..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="p-3 border border-gray-300 rounded-lg w-64 text-base shadow-sm"
+        />
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="p-3 border border-gray-300 rounded-lg text-base shadow-sm"
+        >
+          <option value="All">All</option>
+          <option value="Pending">Pending</option>
+          <option value="Confirmed">Confirmed</option>
+        </select>
+      </div>
 
-                {/* Customer Details with fallback */}
-                <td className="p-4 border">{order.customer?.name || "N/A"}</td>
-                <td className="p-4 border">{order.customer?.phone || "N/A"}</td>
-                <td className="p-4 border">{order.customer?.email || "N/A"}</td>
-                <td className="p-4 border">{order.customer?.address || "N/A"}</td>
-                <td className="p-4 border">{order.customer?.orderType || "N/A"}</td>
-                <td className="p-4 border font-bold">Rs. {order.total}.00</td>
+      <div ref={printRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {filteredOrders.map((order) => (
+          <div
+            key={order._id}
+            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 flex flex-col justify-between"
+          >
+            <div className="mb-4 text-center">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">{order.name}</h2>
+              <div className="space-y-2 text-sm text-gray-700 text-left">
+                <p><span className="font-semibold">📞 Phone:</span> {order.phone}</p>
+                <p><span className="font-semibold">✉️ Email:</span> {order.email}</p>
+                <p><span className="font-semibold">🏠 Address:</span> {order.address}</p>
+                <p><span className="font-semibold">🚚 Order Type:</span> {order.orderType}</p>
+              </div>
+            </div>
 
-                {/* Actions */}
-                <td className="p-4 border text-center">
-                  <div className="flex justify-center gap-2">
-                    {order.status !== "Confirmed" && (
-                      <button
-                        onClick={() => handleConfirmOrder(order._id)}
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                      >
-                        Confirm Order
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleCancelOrder(order._id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                    >
-                      Cancel Order
-                    </button>
+            <div className="mb-4">
+              <p className="text-green-600 font-bold text-lg">Rs. {order.total}.00</p>
+              {order.items.map((item, index) => (
+                <div key={index} className="flex items-center gap-4 mt-4">
+                  <img
+                    src={`http://localhost:5000/uploads/${item.image}`}
+                    alt={item.name}
+                    className="w-14 h-14 rounded-md border object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold text-gray-800">{item.name}</p>
+                    <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
+                    <p className="text-gray-500 text-sm">Rs.{item.price * item.quantity}.00</p>
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2">
+                {order.status !== "Confirmed" && (
+                  <button
+                    onClick={() => handleConfirmOrder(order._id)}
+                    className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-2 rounded shadow"
+                  >
+                    ✅ Confirm
+                  </button>
+                )}
+                <button
+                  onClick={() => handleCancelOrder(order._id)}
+                  className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-2 rounded shadow"
+                >
+                  ❌ Cancel
+                </button>
+              </div>
+              <button
+                onClick={() => handleTrackOrder(order)}
+                className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded shadow"
+              >
+                Update Status
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
