@@ -55,6 +55,10 @@ function OrderStatus() {
     navigate("/track-order-customer", { state: { order } });
   };
 
+  const isCompleted = (order) => {
+    return ["Order Handover to Delivery", "Ready to Pick Up"].includes(order.trackingStatus);
+  };
+
   const filteredOrders = orders.filter((order) => {
     const name = order.name || "";
     const phone = order.phone || "";
@@ -63,6 +67,7 @@ function OrderStatus() {
 
     return (
       (filter === "All" || status === filter) &&
+      !isCompleted(order) &&
       (
         name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         phone.includes(searchTerm) ||
@@ -83,15 +88,24 @@ function OrderStatus() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-3 border border-gray-400 rounded-lg w-80 text-lg"
         />
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="p-3 border border-gray-400 rounded-lg text-lg"
-        >
-          <option value="All">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-        </select>
+        <div className="flex gap-4">
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="p-3 border border-gray-400 rounded-lg text-lg"
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+          </select>
+          <button
+            onClick={() => navigate("/OrderStatus/order-history")
+            }
+            className="bg-amber-500 text-white px-5 py-3 rounded-lg text-base font-semibold hover:bg-amber-600"
+          >
+            View Completed Orders
+          </button>
+        </div>
       </div>
 
       {loading ? (
