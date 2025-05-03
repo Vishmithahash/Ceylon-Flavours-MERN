@@ -43,6 +43,7 @@ import DeliveryPersonPage from "./pages/auth/deliveryperson";
 import Deliveries from "./pages/admin/Deliveries";
 import ManageDeliveryPersonnel from "./pages/admin/ManageDeliveryPersonnel";
 import AddDeliveryPersonnel from "./pages/admin/AssignDelivery";
+import CustomerDeliveries from "./pages/Delivery/CustomerDeliveries";
 
 
 function App() {
@@ -83,6 +84,8 @@ function App() {
           <Route path="/track-order-customer" element={<TrackCusOrderStatus />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+          <Route path="/delivery" element={<ProtectedRoute><CustomerDeliveries /></ProtectedRoute>} />
+
           
 
 

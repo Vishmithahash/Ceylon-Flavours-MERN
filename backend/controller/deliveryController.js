@@ -1,16 +1,53 @@
 import Delivery from "../models/delivery.js"
 
+
+
 // Create delivery
 export const createDelivery = async (req, res) => {
     try {
-        const { DeliveryPersonID, DeliveryPersonName, DeliveryPersonContactNo, VehicleNo, Status} = req.body;
-        const newDelivery = new Delivery({ DeliveryPersonID, DeliveryPersonName, DeliveryPersonContactNo, VehicleNo, Status });
-        await newDelivery.save();
-        res.status(201).json({ message: "Delivery person added successfully", delivery: newDelivery });
+      const {
+        DeliveryPersonID,
+        DeliveryPersonName,
+        DeliveryPersonContactNo,
+        VehicleNo,
+        Status
+      } = req.body;
+  
+      const EnrollmentCode = Math.floor(100000 + Math.random() * 900000).toString(); // 🔐 Auto generate
+  
+      const newDelivery = new Delivery({
+        DeliveryPersonID,
+        DeliveryPersonName,
+        DeliveryPersonContactNo,
+        VehicleNo,
+        Status,
+        EnrollmentCode // ✅ New field (won't affect old logic)
+      });
+  
+      await newDelivery.save();
+      res.status(201).json({ message: "Delivery person added successfully", delivery: newDelivery });
     } catch (error) {
-        res.status(500).json({ message: "Error creating delivery", error: error.message });
+      res.status(500).json({ message: "Error creating delivery", error: error.message });
     }
-};
+  };
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Get all delivery
 export const getAllDelivery = async (req, res) => {
@@ -54,3 +91,9 @@ export const deleteDelivery = async (req, res) => {
         res.status(500).json({ message: "Error deleting delivery infomation", error: error.message });
     }
 };
+
+
+
+
+
+

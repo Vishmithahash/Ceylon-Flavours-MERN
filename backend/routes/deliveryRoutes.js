@@ -13,6 +13,7 @@ deliveryRouter.get("/",getAllDelivery)
 deliveryRouter.put("/update/:id",updateDelivery)
 deliveryRouter.delete("/delete/:id",deleteDelivery)
 
+
 deliveryRouter.get("/proxy-confirmed-orders", getConfirmedOrdersProxy);
 
 
