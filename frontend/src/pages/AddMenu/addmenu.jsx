@@ -238,28 +238,29 @@ function AddMenu() {
 function MenuItem({ item, addToCart, isSpecialDayToday }) {
   const { user } = useContext(AuthContext);
 
-  const discountedPrice = isSpecialDayToday ? (item.price * 0.8).toFixed(2) : item.price;
+  const discountedPrice = isSpecialDayToday
+    ? (item.price * 0.8).toFixed(2)
+    : parseFloat(item.price).toFixed(2);
 
   const handleAddToCart = () => {
     if (!user) {
       alert("🚫 Please login to add items to your cart!");
       return;
     }
-  
+
     if (!item.availability) {
       alert("❌ This item is currently unavailable.");
       return;
     }
-  
+
     const itemToAdd = {
       ...item,
       price: parseFloat(discountedPrice),
     };
-  
+
     addToCart(itemToAdd);
     alert("✅ Item added to cart!");
   };
-  
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow text-center">
@@ -273,15 +274,21 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
       <p className="text-gray-800 font-semibold">
         {isSpecialDayToday ? (
           <>
-            <span className="text-red-500 line-through mr-2">Rs.{item.price}.00</span>
-            <span className="text-green-600 font-bold">Rs.{discountedPrice}.00</span>
+            <span className="text-red-500 line-through mr-2">
+              Rs.{parseFloat(item.price).toFixed(2)}
+            </span>
+            <span className="text-green-600 font-bold">Rs.{discountedPrice}</span>
             <span className="text-yellow-400 text-sm ml-1">(20% OFF!)</span>
           </>
         ) : (
-          <>Rs.{item.price}.00</>
+          <>Rs.{parseFloat(item.price).toFixed(2)}</>
         )}
       </p>
-      <p className={`mt-2 text-sm font-medium ${item.availability ? "text-green-600" : "text-red-600"}`}>
+      <p
+        className={`mt-2 text-sm font-medium ${
+          item.availability ? "text-green-600" : "text-red-600"
+        }`}
+      >
         {item.availability ? "Available" : "Unavailable"}
       </p>
       <button
@@ -293,6 +300,7 @@ function MenuItem({ item, addToCart, isSpecialDayToday }) {
     </div>
   );
 }
+
 
 
 export default AddMenu;
