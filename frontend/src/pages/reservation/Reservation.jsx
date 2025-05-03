@@ -57,38 +57,30 @@ const Reservation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!reservationsOpen) {
       alert("All tables are booked at the moment!");
       return;
     }
 
-    // ✅ Validate phone number (Sri Lankan format: 10 digits, starts with 0)
-const phoneRegex = /^0\d{9}$/;
-if (!phoneRegex.test(formData.phone)) {
-  alert("Please enter a valid Sri Lankan phone number (e.g., 0771234567).");
-  return;
-}
+    const phoneRegex = /^0\d{9}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      alert("Please enter a valid Sri Lankan phone number (e.g., 0771234567).");
+      return;
+    }
 
-    // ✅ Validate number of people
     const peopleCount = parseInt(formData.people);
-if (isNaN(peopleCount) || peopleCount <= 0 || peopleCount > 10) {
-  alert("Maximum number of people can be 10 per Reservation.");
-  return;
-}
+    if (isNaN(peopleCount) || peopleCount <= 0 || peopleCount > 10) {
+      alert("Maximum number of people can be 10 per Reservation.");
+      return;
+    }
 
-
-    // ✅ Combine and validate date & time
     const reservationDateTime = new Date(`${formData.date}T${formData.time}`);
     const now = new Date();
     if (reservationDateTime <= now) {
       alert("Please select a future date and time.");
       return;
     }
-
-
-
-
-
 
     try {
       await axios.post("http://localhost:5000/api/reservations", formData);
@@ -109,42 +101,45 @@ if (isNaN(peopleCount) || peopleCount <= 0 || peopleCount > 10) {
     }
   };
 
-  // ✅ Today's date in YYYY-MM-DD format
   const todayDate = new Date().toISOString().split("T")[0];
 
   if (loading) {
-    return <div className="text-center p-8">Checking reservation availability...</div>;
+    return <div className="text-center p-10 text-lg font-medium">Checking reservation availability...</div>;
   }
 
   if (!reservationsOpen) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-6">
-        <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">All Tables are Booked!</h2>
-          <p className="text-lg text-gray-700">We are currently not accepting new reservations.</p>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 to-purple-200">
+        <div className="bg-white p-10 rounded-2xl shadow-xl text-center max-w-md w-full">
+          <h2 className="text-3xl font-bold text-red-600 mb-4">All Tables are Booked!</h2>
+          <p className="text-gray-700 text-lg">We are currently not accepting new reservations. Please try again later.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-6">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Reserve Your Table</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-tr from-blue-100 via-purple-100 to-pink-100 px-4">
+      <form onSubmit={handleSubmit} className="bg-white p-10 rounded-3xl shadow-2xl max-w-lg w-full">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Reserve Your Table</h2>
 
-        <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <input type="email" name="email" placeholder="Email Address" value={formData.email} readOnly className="w-full p-3 mb-4 border rounded-md bg-gray-100 cursor-not-allowed" />
-        <input type="date" name="date" value={formData.date} onChange={handleChange} required min={todayDate} className="w-full p-3 mb-4 border rounded-md" />
-        <input type="time" name="time" value={formData.time} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <input type="number" name="people" min="1" placeholder="Number of People" value={formData.people} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md" />
-        <select name="table_category" value={formData.table_category} onChange={handleChange} required className="w-full p-3 mb-4 border rounded-md">
-          <option value="Normal">Normal Table</option>
-          <option value="VIP">VIP Table</option>
-        </select>
-        <textarea name="specialRequest" placeholder="Special Requests (optional)" value={formData.specialRequest} onChange={handleChange} className="w-full p-3 mb-6 border rounded-md" />
+        <div className="space-y-4">
+          <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" />
+          <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" />
+          <input type="email" name="email" placeholder="Email Address" value={formData.email} readOnly className="w-full px-4 py-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed" />
+          <div className="flex space-x-4">
+            <input type="date" name="date" value={formData.date} onChange={handleChange} required min={todayDate} className="w-1/2 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" />
+            <input type="time" name="time" value={formData.time} onChange={handleChange} required className="w-1/2 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" />
+          </div>
+          <input type="number" name="people" min="1" placeholder="Number of People" value={formData.people} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" />
+          <select name="table_category" value={formData.table_category} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400">
+            <option value="Normal">Normal Table</option>
+            <option value="VIP">VIP Table</option>
+          </select>
+          <textarea name="specialRequest" placeholder="Special Requests (optional)" value={formData.specialRequest} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 resize-none" rows="3" />
+        </div>
 
-        <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md transition">
+        <button type="submit" className="mt-6 w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 rounded-md transition duration-300 ease-in-out shadow-md">
           Book Now
         </button>
       </form>

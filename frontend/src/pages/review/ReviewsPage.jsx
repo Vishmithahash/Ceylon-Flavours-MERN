@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Star } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function ReviewsPage() {
@@ -25,7 +25,63 @@ function ReviewsPage() {
     "pussy", "slut", "whore", "hell", "suck", "jerk", "motherfucker",
     "son of a bitch", "bullshit", "arse", "wanker", "cunt", "prick",
     "wtf", "fml", "fk", "stfu", "omfg", "gtfo", "suckmydick",
-    "pissu", "kunu", "yakko", "harupa", "gahala maranawa", "hema hora"
+    "pissu", "kunu", "yakko", "harupa", "gahala maranawa", "hema hora",
+
+   
+  "nutjob", "twat", "bugger", "bollocks", "numbnuts", "shitface",
+  "dipshit", "numbnut", "shithole", "shitbag", "scumbag",
+  "douchebag", "jackass", "pisshead", "asswipe", "fuckhead",
+  "fuckface", "shitfaced", "dumbfuck", "cockhead", "bastardo",
+  "skank", "hoe", "scrote", "fuckwad", "fuckstick", "shitstick",
+  "jerkwad", "twatwaffle", "assclown", "fuckhole", "balllicker",
+  "shitstain", "cocksucker", "shitbrain", "cumdumpster",
+  "fag", "faggot", "tranny", "queer", "dyke", "gaylord",
+  "kunt", "twit", "pecker", "wang", "schlong", "douche",
+  "knob", "arsewipe", "tard", "mong", "beaner", "spic",
+  "chink", "gook", "paki", "camel jockey", "towelhead",
+  "sandnigger", "nigga", "nigger", "negro", "coon", "darkie",
+  "cracker", "redneck", "hillbilly", "wetback", "gringo",
+  "retarded", "cripple", "invalid", "fatass", "lardass",
+  "fatso", "chunky", "blubber", "ugly", "minger", "slapper",
+  "dickhead", "arsehole", "shithead", "fucktard", "bitchass",
+  "fuckboy", "fucker", "arseface", "dipshit", "pissface",
+  "assmaster", "goddamn", "shitload", "fuckload", "buttfuck",
+  "ballbag", "cuntface", "pissflaps", "fucknugget",
+  "shitlord", "pisspants", "cockmuncher", "fuckmuppet",
+  "cumbubble", "jizz", "jizzmopper", "dickweed", "cumstain",
+  "pissbucket", "fuckface", "shitlicker", "asshat",
+  "fuckmeat", "shitweasel", "fucktard", "dumbass",
+  "twatwaffle", "fudgewagon", "shart", "shitter",
+  "dickless", "cockmongler", "assboner", "cockbite",
+  "shitstorm", "pussbucket", "ballsack", "knobhead",
+  "fartknocker", "shitbird", "pissrat", "pissmonger",
+  "scumbucket", "nutlicker", "shitpile", "cocknose",
+  "shitbreath", "fuckbucket", "fudgewit", "twatwaffle",
+  "shitpants", "assdouche", "bastardface", "cuntbag",
+  "asscock", "fuckyourself", "cocksmoker", "pisslord",
+  "shitmouth", "pissdrinker", "cocksnot", "asscrack",
+  "fuckwagon", "dickwagon", "arsecrumpet", "knobjockey",
+  "cockwaffle", "arsemonkey", "pissclown", "cumrocket",
+  "shithouse", "dickbrains", "cocknugget", "fuckbiscuit",
+  "arsegremlin", "fuckwhistle", "knobgoblin", "cumguzzler",
+  "shitgibbon", "cockwomble", "fucktwit", "cockwrench",
+  "douchecanoe", "knobjob", "fuckwhit", "shitlord",
+  "cumbucket", "twatstick", "arsepimple", "fuckplank",
+  "shitmuffin", "arsewizard", "asspirate", "fuckpuddle",
+  "cockslap", "fucktangle", "shitface", "bollockhead",
+  "arselicker", "cocksplat", "fucksprout", "shitshovel",
+  "knobmonkey", "shitsplat", "twatsplat", "twatdangle",
+
+  "huththo","pakaya","wesi","hukapan","balli","pakaya","huththi","kariya","huththige putha","ponnaya","kari","puka","huththo","pakaya","wesi","hukapan","balli","pakaya","huththi","kariya","huththige putha",
+  "ponnaya","kari","puka", "kunu", "ballek", "gon", "harupa", "modaya", "yakadaya", "pissu",
+   "kunu", "kunu harupa", "yakko", "moda", "gon", "baya", "paraya",
+  "mala", "muhuda", "uththare", "gembek", "harupa", "buruwa", "uruma",
+  "ethakota umba", "harak", "magema amma", "kariya", "huththi", "puka",
+  "kudda", "thaniya", "kalakanni", "wehi", "siyalu", "pakaya", "thadiya",
+  "sudu akka", "gon haraka", "thadi amma", "heena", "ethuma", "kurutta",
+  "mara pissu", "saththu", "yanna", "yanna pissu", "gona", "unna", "uda",
+  "umbata", "tho", "thopi","bijja","lodaya","wesa","lolla"
+  
   ];
 
   useEffect(() => {
@@ -44,6 +100,17 @@ function ReviewsPage() {
       setFilteredReviews(response.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to delete this review?");
+    if (!confirm) return;
+    try {
+      await axios.delete(`http://localhost:5000/api/reviews/${id}`);
+      fetchReviews();
+    } catch (error) {
+      console.error("Error deleting review:", error);
     }
   };
 
@@ -181,7 +248,10 @@ function ReviewsPage() {
                       </div>
                     )}
                     {review.email === userEmail && (
-                      <button onClick={() => handleEditClick(review)} className="w-full mt-3 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Edit Review</button>
+                      <div className="flex gap-3 mt-3">
+                        <button onClick={() => handleEditClick(review)} className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Edit Review</button>
+                        <button onClick={() => handleDelete(review._id)} className="w-full bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">Delete</button>
+                      </div>
                     )}
                   </>
                 )}

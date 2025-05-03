@@ -25,7 +25,7 @@ import HomePage from "./pages/home/home";
 import TrackAdminOrderStatus from "./pages/OrderStatus/trackAdminOrderStatus";
 import TrackCusOrderStatus from "./pages/OrderStatus/trackCusOrderStatus";
 import UserReservations from "./pages/reservation/UserReservations";
-
+import OrderHistory from "./pages/OrderStatus/orderHistory";
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -84,9 +84,13 @@ function App() {
           <Route path="/track-order-customer" element={<TrackCusOrderStatus />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+
           <Route path="/delivery" element={<ProtectedRoute><CustomerDeliveries /></ProtectedRoute>} />
 
-          
+
+          <Route path="/admin/track-order" element={<TrackAdminOrderStatus />} />
+          <Route path="/OrderStatus/order-history" element={<OrderHistory />} />
+
 
 
 
@@ -101,8 +105,7 @@ function App() {
           <Route path="/admin/delivery" element={<ProtectedRoute><AdminLayout><Deliveries /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/manage-delivery-personnel" element={<ProtectedRoute><AdminLayout><ManageDeliveryPersonnel /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/add-delivery-personnel" element={<ProtectedRoute><AdminLayout><AddDeliveryPersonnel /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/track-order" element={<TrackAdminOrderStatus />} />
-
+         
 
 
 

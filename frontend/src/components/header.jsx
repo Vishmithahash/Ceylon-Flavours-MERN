@@ -36,19 +36,24 @@ function Header() {
             <ul className="flex space-x-6 text-lg items-center">
               {[
                 { path: "/", label: "Home" },
-                { path: "/addmenu", label: "Menu" },
-
-
-              
+                {
+                  path: "/addmenu",
+                  label: "Menu",
+                  onClick: () => {
+                    sessionStorage.removeItem("showSpecialMenuPage");
+                    sessionStorage.removeItem("nextSpecialDate");
+                  }
+                },
                 { path: "/reviewspage", label: "Ratings" },
 
 
+                { path: "/cart", label: "Cart" }
 
-                { path: "/cart", label: "Cart" },
               ].map((item) => (
                 <li key={item.label} className="relative">
                   <Link
                     to={item.path}
+                    onClick={item.onClick}
                     className="transition-all duration-300 ease-in-out hover:text-yellow-300 after:block after:content-[''] after:w-0 after:h-[3px] after:bg-yellow-300 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
                   >
                     {item.label}
@@ -61,7 +66,7 @@ function Header() {
                 </li>
               ))}
 
-              {/* ✅ Reservations link with login check */}
+              {/* Reservations link */}
               <li className="relative">
                 <button
                   onClick={() => {
@@ -80,17 +85,15 @@ function Header() {
             </ul>
           </nav>
 
-          {/* Profile Image + Login/Logout */}
+          {/* Profile image logic */}
           <div className="flex items-center space-x-4">
             <div
               className="flex flex-col items-center cursor-pointer"
               onClick={() => {
                 if (user?.role === "admin") {
-                  alert("🚫 Admin profile view is not available.");
+                  alert("Admin profile view is not available.");
                 } else if (user) {
                   navigate("/profile");
-                } else {
-                  alert("You need to register first to access the profile.");
                 }
               }}
             >
