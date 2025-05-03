@@ -32,19 +32,37 @@ function Menu() {
   };
 
   const validateFoodImage = async () => {
+  try {
     const formData = new FormData();
     formData.append("image", itemImage);
 
     const response = await axios.post("http://localhost:5000/api/clarifai/validate-image", formData);
+    const concepts = response.data?.results?.[0]?.outputs?.[0]?.data?.concepts || [];
 
-    const concepts = response.data?.results?.[0]?.outputs?.[0]?.data?.concepts;
-    const match = concepts.some(concept =>
-      concept.name.toLowerCase().includes(itemName.toLowerCase())
+    const labels = concepts.map(concept => concept.name.toLowerCase());
+    const nameWords = itemName.toLowerCase().split(/\s+/);
+
+    // Filter out common stopwords that don't matter for food
+    const filteredWords = nameWords.filter(word =>
+      !["with", "and", "combo", "meal", "special", "box"].includes(word)
     );
 
-    return match;
-  };
+    const matchedWords = filteredWords.filter(word =>
+      labels.some(label => label.includes(word))
+    );
 
+    console.log("Detected labels:", labels);
+    console.log("Filtered item name words:", filteredWords);
+    console.log("Matched words:", matchedWords);
+
+    return matchedWords.length >= 1; 
+  } catch (error) {
+    console.error("Image validation error:", error);
+    return false;
+  }
+};
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
