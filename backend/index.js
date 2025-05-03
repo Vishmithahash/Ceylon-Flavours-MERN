@@ -55,6 +55,8 @@ import adminRoutes from "./routes/adminRoutes.js";
 import deliveryAssignmentRoutes from "./routes/deliveryAssignmentRoutes.js";
 
 import configRoutes from "./routes/configRoutes.js";  // (Add this import with others)
+import deliveryAssignedOrdersProxyRoutes from "./routes/deliveryAssignedOrdersProxyRoutes.js";
+import userDeliveryRoutes from "./routes/userDeliveryRoutes.js";
 
 
 
@@ -73,6 +75,8 @@ app.use("/api/delivery-assignment", deliveryAssignmentRoutes);
 app.use("/api/config", configRoutes);  // (Add this use with others)
 
 app.use("/api/clarifai", clarifaiProxy);
+app.use("/api/proxy", deliveryAssignedOrdersProxyRoutes);
+app.use("/api/user", userDeliveryRoutes);
 
 
 // Start server (ONLY ONE app.listen!)
