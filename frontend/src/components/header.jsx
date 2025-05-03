@@ -42,15 +42,6 @@ function Header() {
               
                 { path: "/reviewspage", label: "Ratings" },
 
-                
-                
-
-                { path: "/reviewspage", label: "Ratings" },
-
-
-
-
-                { path: "/reviewspage", label: "Ratings" },
 
                 { path: "/cart", label: "Cart" },
               ].map((item) => (
