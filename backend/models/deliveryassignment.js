@@ -7,8 +7,7 @@ const deliveryAssignmentSchema = new mongoose.Schema({
     required: true,
   },
   deliveryPersonId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Delivery",
+    type: String, // ✅ now stores values like "DP006"
     required: true,
   },
   status: {

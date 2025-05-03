@@ -21,6 +21,19 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+
+
+
+    EnrollmentCode: {
+        type: String,
+        default: null, // ✅ Optional, won't break existing logic
+      },
+
+
+
+
+
+
    
 })
 
