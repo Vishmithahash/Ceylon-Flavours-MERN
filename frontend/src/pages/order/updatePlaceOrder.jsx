@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+
+
 const allColomboAreas = [
   // Urban Areas
   "colombo", "pettah", "fort", "bambalapitiya", "kollupitiya", "maradana",
@@ -12,6 +14,8 @@ const allColomboAreas = [
   "thimbirigasyaya", "kirulapone", "mutwal", "grandpass", "orugodawatta",
   "wellampitiya", "meethotamulla", "panchikawatta", "maligawatta",
   "bloemendhal", "hultsdorf", "wolvendhal",
+
+
 
   // Suburban Areas
   "nawala", "nugegoda", "rajagiriya", "pita kotte", "ethul kotte",
@@ -36,14 +40,20 @@ const allColomboAreas = [
   "dolekade", "millaniya (partial)", "henawita", "talagala"
 ];
 
+
+
 const isKnownColomboArea = (address) => {
   const lowerAddress = address.toLowerCase();
   return allColomboAreas.some((area) => lowerAddress.includes(area));
 };
 
+
+
 const isAddressInColombo = (address) => {
   return address.toLowerCase().includes("colombo district");
 };
+
+
 
 function UpdatePlaceOrder() {
   const location = useLocation();
@@ -61,6 +71,8 @@ function UpdatePlaceOrder() {
   const [showMap, setShowMap] = useState(false);
   const [markerPos, setMarkerPos] = useState([6.9271, 79.8612]);
 
+
+  
   const colomboPostalCodes = [
     // Colombo 1–15
     "00100", "00200", "00300", "00400", "00500", "00600", "00700", "00800", "00900", "01000",
