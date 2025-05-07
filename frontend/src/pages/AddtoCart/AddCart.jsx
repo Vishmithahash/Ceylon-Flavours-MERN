@@ -55,6 +55,11 @@ function AddCart() {
                 </div>
               </div>
 
+
+
+
+
+
               <div className="flex items-center gap-4">
                 <div className="flex items-center bg-white border rounded-lg shadow-sm overflow-hidden">
                   <button onClick={() => decreaseQuantity(item._id)} className="px-3 py-2 text-red-500 hover:bg-red-100 transition">

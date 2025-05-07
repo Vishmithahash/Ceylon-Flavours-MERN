@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+
+
 const allColomboAreas = [
   // Urban Areas
   "colombo", "pettah", "fort", "bambalapitiya", "kollupitiya", "maradana",
@@ -12,6 +14,8 @@ const allColomboAreas = [
   "thimbirigasyaya", "kirulapone", "mutwal", "grandpass", "orugodawatta",
   "wellampitiya", "meethotamulla", "panchikawatta", "maligawatta",
   "bloemendhal", "hultsdorf", "wolvendhal",
+
+
 
   // Suburban Areas
   "nawala", "nugegoda", "rajagiriya", "pita kotte", "ethul kotte",
