@@ -66,8 +66,10 @@ function OrderHistory() {
                         <p className="text-sm text-green-600 font-bold">Rs. {item.price * item.quantity}.00</p>
                       </div>
                     </div>
-                    
+
                   ))}
+
+                  
                   <div className="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-lg space-y-1 mt-4">
                     <p className="text-blue-600 font-medium">Subtotal: Rs. {order.subtotal}.00</p>
                     <p className="text-red-500 font-medium">Delivery Fee: Rs. {order.deliveryFee}.00</p>
