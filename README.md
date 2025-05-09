@@ -1,6 +1,6 @@
 # 🍽️ Ceylon Flavours – Restaurant Management System (MERN Stack)
 
-Ceylon is a full-stack restaurant management system developed as a **group project** using the **MERN stack** — MongoDB, Express.js, React.js, and Node.js.
+Ceylon Flavours is a full-stack restaurant management system developed as a **group project** using the **MERN stack** — MongoDB, Express.js, React.js, and Node.js.
 
 ---
 
@@ -31,4 +31,14 @@ Ceylon is a full-stack restaurant management system developed as a **group proje
 - 🚚 Delivery Assignment & Tracking
 - 📊 Admin Dashboard
 
+---
 
+## 🧑‍🤝‍🧑 Project Contributors
+
+| Name                       | GitHub Profile                                                   
+|----------------------------|------------------------------------------------------------------|
+| **Vishmitha Hashendra**    | [@Vishmithahash](https://github.com/Vishmithahash)               |
+| **Archala**                | [@archala23186088](https://github.com/archala23186088)           |
+| **Anuradha**               | [@GitAnu-is](https://github.com/GitAnu-is)                       |
+| **Ushara**                 | [@UsharaChamudithaKumara](https://github.com/UsharaChamudithaKumara) |
+| **Danuka**                 | [@Danuka23236646](https://github.com/Danuka23236646)               |
